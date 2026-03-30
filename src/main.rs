@@ -13,6 +13,7 @@ mod kaprekar_6174;
 mod path_discovery;
 mod polynomial;
 mod report;
+mod sudoku;
 
 use report::CaseReport;
 
@@ -29,6 +30,7 @@ enum CaseName {
     Kaprekar6174,
     PathDiscovery,
     Polynomial,
+    Sudoku,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -63,10 +65,11 @@ fn parse_case_name(raw: &str) -> io::Result<CaseName> {
         "kaprekar-6174" | "kaprekar_6174" => Ok(CaseName::Kaprekar6174),
         "path-discovery" | "path_discovery" => Ok(CaseName::PathDiscovery),
         "polynomial" => Ok(CaseName::Polynomial),
+        "sudoku" => Ok(CaseName::Sudoku),
         other => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             format!(
-                "unknown case '{other}'. available cases:\n  collatz-1000\n  control-system\n  deep-taxonomy-100000\n  delfour\n  euler-identity\n  fibonacci\n  goldbach-1000\n  gps\n  kaprekar-6174\n  path-discovery\n  polynomial\n\nextra commands:\n  --list\n  --all\n\nextra options:\n  --format text\n  --format json"
+                "unknown case '{other}'. available cases:\n  collatz-1000\n  control-system\n  deep-taxonomy-100000\n  delfour\n  euler-identity\n  fibonacci\n  goldbach-1000\n  gps\n  kaprekar-6174\n  path-discovery\n  polynomial\n  sudoku\n\nextra commands:\n  --list\n  --all\n\nextra options:\n  --format text\n  --format json"
             ),
         )),
     }
@@ -146,6 +149,7 @@ fn case_names() -> &'static [&'static str] {
         "kaprekar-6174",
         "path-discovery",
         "polynomial",
+        "sudoku",
     ]
 }
 
@@ -168,6 +172,7 @@ fn case_report(case_name: CaseName) -> io::Result<CaseReport> {
         CaseName::Kaprekar6174 => kaprekar_6174::report(),
         CaseName::PathDiscovery => path_discovery::report(),
         CaseName::Polynomial => polynomial::report(),
+        CaseName::Sudoku => sudoku::report(),
     }
 }
 
@@ -190,10 +195,11 @@ fn run_case_text(case_name: CaseName) -> io::Result<()> {
         CaseName::Kaprekar6174 => kaprekar_6174::run_and_print(),
         CaseName::PathDiscovery => path_discovery::run_and_print(),
         CaseName::Polynomial => polynomial::run_and_print(),
+        CaseName::Sudoku => sudoku::run_and_print(),
     }
 }
 
-fn all_case_names() -> [CaseName; 11] {
+fn all_case_names() -> [CaseName; 12] {
     [
         CaseName::Collatz1000,
         CaseName::ControlSystem,
@@ -206,13 +212,14 @@ fn all_case_names() -> [CaseName; 11] {
         CaseName::Kaprekar6174,
         CaseName::PathDiscovery,
         CaseName::Polynomial,
+        CaseName::Sudoku,
     ]
 }
 
 fn run_all_cases(format: OutputFormat) -> io::Result<()> {
     match format {
         OutputFormat::Text => {
-            let runners: [fn() -> io::Result<()>; 11] = [
+            let runners: [fn() -> io::Result<()>; 12] = [
                 collatz_1000::run_and_print,
                 control_system::run_and_print,
                 deep_taxonomy_100000::run_and_print,
@@ -224,6 +231,7 @@ fn run_all_cases(format: OutputFormat) -> io::Result<()> {
                 kaprekar_6174::run_and_print,
                 path_discovery::run_and_print,
                 polynomial::run_and_print,
+                sudoku::run_and_print,
             ];
 
             for (index, run) in runners.into_iter().enumerate() {
@@ -293,6 +301,7 @@ mod tests {
         assert!(matches!(parse_case_name("path-discovery").unwrap(), CaseName::PathDiscovery));
         assert!(matches!(parse_case_name("path_discovery").unwrap(), CaseName::PathDiscovery));
         assert!(matches!(parse_case_name("polynomial").unwrap(), CaseName::Polynomial));
+        assert!(matches!(parse_case_name("sudoku").unwrap(), CaseName::Sudoku));
     }
 
     #[test]

@@ -90,6 +90,7 @@ fn list_shows_all_available_cases() {
     assert!(stdout.contains("kaprekar-6174"));
     assert!(stdout.contains("path-discovery"));
     assert!(stdout.contains("polynomial"));
+    assert!(stdout.contains("sudoku"));
 }
 
 #[test]
@@ -264,7 +265,22 @@ fn json_output_for_single_case_is_structured() {
 }
 
 #[test]
-fn json_output_for_all_cases_is_an_array_of_eleven_reports() {
+fn sudoku_cli_reports_the_default_puzzle_solution() {
+    let output = run_case("sudoku");
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    assert!(stdout.contains("case              : sudoku"));
+    assert!(stdout.contains("default puzzle    : classic"));
+    assert!(stdout.contains("The puzzle is solved, and the completed grid is the unique valid Sudoku solution."));
+    assert!(stdout.contains("5 3 4 | 6 7 8 | 9 1 2"));
+    assert!(stdout.contains("3 4 5 | 2 8 6 | 1 7 9"));
+    assert!(stdout.contains("C1 OK - every given clue is preserved in the final grid."));
+    assert!(stdout.contains("C8 OK - a second search found no alternative solution, so the solution is unique."));
+}
+
+#[test]
+fn json_output_for_all_cases_is_an_array_of_twelve_reports() {
     let output = run_args(&["--all", "--format", "json"]);
     assert!(output.status.success());
 
@@ -272,7 +288,8 @@ fn json_output_for_all_cases_is_an_array_of_eleven_reports() {
     let value: serde_json::Value = serde_json::from_str(&stdout).expect("valid json output");
 
     let reports = value.as_array().expect("top-level json array");
-    assert_eq!(reports.len(), 11);
+    assert_eq!(reports.len(), 12);
     assert_eq!(reports[0]["case"], "collatz-1000");
-    assert_eq!(reports[9]["case"], "polynomial");
+    assert_eq!(reports[10]["case"], "polynomial");
+    assert_eq!(reports[11]["case"], "sudoku");
 }

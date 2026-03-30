@@ -22,6 +22,7 @@ CASES=(
   kaprekar-6174
   path-discovery
   polynomial
+  sudoku
 )
 
 usage() {

@@ -1,6 +1,6 @@
 # arclight
 
-This repository contains eleven small, fast Rust ARC programs.
+This repository contains twelve small, fast Rust ARC programs.
 
 ARC stands for **Answer • Reason • Check**. An ARC program does more than emit a result. It gives:
 
@@ -198,6 +198,19 @@ It models:
 - depth-limited DFS over simple paths
 - a query for all routes from Ostend-Bruges International Airport to Václav Havel Airport Prague with at most 2 stopovers
 
+### `sudoku`
+
+A generic Sudoku solver in `src/sudoku.rs`.
+
+It models:
+
+- a standard 9×9 Sudoku grid as 81 cells
+- row, column, and box legality with bitmask tracking
+- repeated naked-single propagation
+- minimum-remaining-values branching with backtracking
+- a default classic puzzle and its completed grid
+- independent checks for clue preservation, unit validity, legality replay, and uniqueness
+
 ## Files
 
 - `src/main.rs` — CLI dispatcher
@@ -213,6 +226,7 @@ It models:
 - `src/kaprekar_6174.rs` — Kaprekar 6174 proof example
 - `src/path_discovery.rs` — path discovery benchmark translation plus generated airport and flight data
 - `src/polynomial.rs` — polynomial benchmark translation
+- `src/sudoku.rs` — generic Sudoku solver
 - `pilot.sh` — build, refresh, and check snapshot files
 
 ## Run
@@ -239,6 +253,7 @@ cargo run --release -- gps
 cargo run --release -- kaprekar-6174
 cargo run --release -- path-discovery
 cargo run --release -- polynomial
+cargo run --release -- sudoku
 ```
 
 Structured JSON output for one case:
