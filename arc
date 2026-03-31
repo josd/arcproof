@@ -4,11 +4,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
 
-BINARY="$ROOT_DIR/target/release/arclight"
+BINARY="$ROOT_DIR/target/release/arc"
 SNAPSHOT_DIR="$ROOT_DIR/snapshots"
 TEXT_DIR="$SNAPSHOT_DIR/text"
 JSON_DIR="$SNAPSHOT_DIR/json"
-TMP_DIR="$ROOT_DIR/target/arclight-pilot"
+TMP_DIR="$ROOT_DIR/target/arc-pilot"
 
 CASES=(
   collatz-1000
@@ -27,12 +27,12 @@ CASES=(
 
 usage() {
   cat <<'EOF'
-Usage: ./pilot.sh [check|refresh|show CASE [text|json]]
+Usage: ./arc [check|refresh|show CASE [text|json]]
 
 Commands:
-  check          Build Arclight, regenerate fresh output into a temp folder,
+  check          Build arc, regenerate fresh output into a temp folder,
                  and diff it against checked-in snapshots.
-  refresh        Build Arclight and overwrite the checked-in snapshots.
+  refresh        Build arc and overwrite the checked-in snapshots.
   show CASE      Print one case directly using the built release binary.
                  Add a third argument of 'json' to see structured output.
 
@@ -79,7 +79,7 @@ require_snapshots() {
 
   if [[ "$missing" -ne 0 ]]; then
     echo >&2
-    echo "Run './pilot.sh refresh' to generate the initial snapshots." >&2
+    echo "Run './arc refresh' to generate the initial snapshots." >&2
     exit 1
   fi
 }
@@ -106,7 +106,7 @@ check_snapshots() {
 
   if [[ "$failed" -ne 0 ]]; then
     echo >&2
-    echo "Snapshot drift detected. Review the diff, then run './pilot.sh refresh' if the change is intentional." >&2
+    echo "Snapshot drift detected. Review the diff, then run './arc refresh' if the change is intentional." >&2
     exit 1
   fi
 

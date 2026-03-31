@@ -4,33 +4,33 @@ case              : sudoku
 default puzzle    : classic
 
 Puzzle
-5 3 . | . 7 . | . . . 
-6 . . | 1 9 5 | . . . 
-. 9 8 | . . . | . 6 . 
+1 . . | . . 7 | . 9 . 
+. 3 . | . 2 . | . . 8 
+. . 9 | 6 . . | 5 . . 
 
-8 . . | . 6 . | . . 3 
-4 . . | 8 . 3 | . . 1 
-7 . . | . 2 . | . . 6 
+. . 5 | 3 . . | 9 . . 
+. 1 . | . 8 . | . . 2 
+6 . . | . . 4 | . . . 
 
-. 6 . | . . . | 2 8 . 
-. . . | 4 1 9 | . . 5 
-. . . | . 8 . | . 7 9 
+3 . . | . . . | . 1 . 
+. 4 . | . . . | . . 7 
+. . 7 | . . . | 3 . . 
 
 Completed grid
-5 3 4 | 6 7 8 | 9 1 2 
-6 7 2 | 1 9 5 | 3 4 8 
-1 9 8 | 3 4 2 | 5 6 7 
+1 6 2 | 8 5 7 | 4 9 3 
+5 3 4 | 1 2 9 | 6 7 8 
+7 8 9 | 6 4 3 | 5 2 1 
 
-8 5 9 | 7 6 1 | 4 2 3 
-4 2 6 | 8 5 3 | 7 9 1 
-7 1 3 | 9 2 4 | 8 5 6 
+4 7 5 | 3 1 2 | 9 8 6 
+9 1 3 | 5 8 6 | 7 4 2 
+6 2 8 | 7 9 4 | 1 3 5 
 
-9 6 1 | 5 3 7 | 2 8 4 
-2 8 7 | 4 1 9 | 6 3 5 
-3 4 5 | 2 8 6 | 1 7 9 
+3 5 6 | 4 7 8 | 2 1 9 
+2 4 1 | 9 3 5 | 8 6 7 
+8 9 7 | 2 6 1 | 3 5 4 
 
 === Reason Why ===
-The solver starts from 30 clues and fills the remaining 51 cells by combining constraint propagation with depth-first search. At each step it chooses the empty cell with the fewest legal digits, places forced singles immediately, and only guesses when more than one candidate remains. Across the search it made 51 forced placements and tried 0 guesses, visited 1 search nodes overall, and backtracked 0 times before reaching the completed grid. The solver also confirmed that the solution is unique. Early steps: r5c5=5: forced, r6c4=9: forced, r7c5=3: forced, r7c6=7: forced, r7c9=4: forced, r8c8=3: forced, r3c5=4: forced, r3c6=2: forced, … and 43 more placements
+The solver starts from 23 clues and fills the remaining 58 cells by combining constraint propagation with depth-first search. At each step it chooses the empty cell with the fewest legal digits, places forced singles immediately, and only guesses when more than one candidate remains. Across the search it made 213 forced placements and tried 22 guesses, visited 23 search nodes overall, and backtracked 12 times before reaching the completed grid. The solver also confirmed that the solution is unique. Early steps: r2c3=4: guess, r5c3=3: forced, r2c1=5: guess, r2c4=1: guess, r2c6=9: forced, r2c7=6: guess, r2c8=7: forced, r1c7=4: guess, … and 50 more placements
 
 === Check ===
 C1 OK - every given clue is preserved in the final grid.

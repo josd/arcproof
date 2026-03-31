@@ -1,17 +1,17 @@
 # Snapshots
 
-This directory holds the checked-in expected output for Arclight.
+This directory holds the checked-in expected output for arc.
 
 Generate or refresh it with:
 
 ```bash
-./pilot.sh refresh
+./arc refresh
 ```
 
 Then verify it with:
 
 ```bash
-./pilot.sh check
+./arc check
 ```
 
 Text snapshots live in `snapshots/text/`.

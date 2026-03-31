@@ -1,10 +1,10 @@
 use std::process::Command;
 
 fn run_args(args: &[&str]) -> std::process::Output {
-    Command::new(env!("CARGO_BIN_EXE_arclight"))
+    Command::new(env!("CARGO_BIN_EXE_arc"))
         .args(args)
         .output()
-        .expect("failed to run arclight binary")
+        .expect("failed to run arc binary")
 }
 
 fn run_case(arg: &str) -> std::process::Output {
@@ -236,9 +236,9 @@ fn polynomial_cli_reports_both_expected_examples() {
 
 #[test]
 fn bare_invocation_runs_the_same_cases_as_all() {
-    let bare = Command::new(env!("CARGO_BIN_EXE_arclight"))
+    let bare = Command::new(env!("CARGO_BIN_EXE_arc"))
         .output()
-        .expect("failed to run bare arclight binary");
+        .expect("failed to run bare arc binary");
     assert!(bare.status.success());
 
     let all = run_case("--all");
@@ -273,8 +273,8 @@ fn sudoku_cli_reports_the_default_puzzle_solution() {
     assert!(stdout.contains("case              : sudoku"));
     assert!(stdout.contains("default puzzle    : classic"));
     assert!(stdout.contains("The puzzle is solved, and the completed grid is the unique valid Sudoku solution."));
-    assert!(stdout.contains("5 3 4 | 6 7 8 | 9 1 2"));
-    assert!(stdout.contains("3 4 5 | 2 8 6 | 1 7 9"));
+    assert!(stdout.contains("1 6 2 | 8 5 7 | 4 9 3"));
+    assert!(stdout.contains("8 9 7 | 2 6 1 | 3 5 4"));
     assert!(stdout.contains("C1 OK - every given clue is preserved in the final grid."));
     assert!(stdout.contains("C8 OK - a second search found no alternative solution, so the solution is unique."));
 }

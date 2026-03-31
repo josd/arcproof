@@ -1,4 +1,4 @@
-# arclight
+# arc
 
 This repository contains twelve small, fast Rust ARC programs.
 
@@ -22,7 +22,7 @@ These examples are organized around a few simple ARC principles:
 - **Runtime verification is mandatory** — every case should validate key invariants during execution rather than relying on trust in the code or in the author
 - **Portable artifacts beat opaque sessions** — a small standalone program is easier to benchmark, automate, audit, archive, and compare across implementations
 
-In this repository, the programs are handwritten and specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
+In this repository, the programs are generated with GPT and iteratively refined under human guidance. They are specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. Rather than using a generic logical reasoner, arc uses generated, task-specific Rust cases that follow an Answer–Reason–Check discipline. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
 
 ## Why this style is useful
 
@@ -208,7 +208,7 @@ It models:
 - row, column, and box legality with bitmask tracking
 - repeated naked-single propagation
 - minimum-remaining-values branching with backtracking
-- a default classic puzzle and its completed grid
+- a default puzzle and its completed grid
 - independent checks for clue preservation, unit validity, legality replay, and uniqueness
 
 ## Files
@@ -227,11 +227,11 @@ It models:
 - `src/path_discovery.rs` — path discovery benchmark translation plus generated airport and flight data
 - `src/polynomial.rs` — polynomial benchmark translation
 - `src/sudoku.rs` — generic Sudoku solver
-- `pilot.sh` — build, refresh, and check snapshot files
+- `arc` — build, refresh, and check snapshot files
 
 ## Run
 
-The package name is `arclight`, so a release build produces `target/release/arclight`.
+The package name is `arc`, so a release build produces `target/release/arc`.
 
 Default case:
 
@@ -270,7 +270,7 @@ cargo run --release -- --all --format json
 
 ## Stable output and snapshots
 
-Arclight supports two stable output forms:
+arc supports two stable output forms:
 
 - the normal human-readable ARC text output
 - a structured JSON report produced with `--format json`
@@ -282,14 +282,14 @@ The recommended workflow is:
 3. store checked-in snapshots for both
 4. refresh snapshots only when a case intentionally changes
 
-The root `pilot.sh` script is the main driver for this:
+The root `arc` script is the main driver for this:
 
-Because snapshots are regular files in the repository, intentional output changes show up as normal diffs in version control. If you add or grow a case, run `./pilot.sh refresh`, review the snapshot diff, and commit it together with the code change.
+Because snapshots are regular files in the repository, intentional output changes show up as normal diffs in version control. If you add or grow a case, run `./arc refresh`, review the snapshot diff, and commit it together with the code change.
 
 
 ```bash
-./pilot.sh refresh
-./pilot.sh check
+./arc refresh
+./arc check
 ```
 
 What it does:

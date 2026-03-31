@@ -6,7 +6,7 @@ use crate::report::{CaseReport, ReportItem};
 const ALL: u16 = 0x1FF; // bits 0..8 represent digits 1..9
 const DEFAULT_PUZZLE_NAME: &str = "classic";
 const DEFAULT_PUZZLE: &str =
-    "530070000600195000098000060800060003400803001700020006060000280000419005000080079";
+    "100007090030020008009600500005300900010080002600004000300000010040000007007000300";
 
 #[derive(Clone, Copy, Debug)]
 struct MoveLog {
@@ -599,8 +599,8 @@ mod tests {
         let puzzle = parse_puzzle(DEFAULT_PUZZLE).unwrap();
         let report = build_arc_report(&puzzle);
         assert!(report.answer.contains("solved"));
-        assert!(report.solution_text.contains("5 3 4 | 6 7 8 | 9 1 2"));
-        assert!(report.solution_text.contains("3 4 5 | 2 8 6 | 1 7 9"));
+        assert!(report.solution_text.contains("1 6 2 | 8 5 7 | 4 9 3"));
+        assert!(report.solution_text.contains("8 9 7 | 2 6 1 | 3 5 4"));
     }
 
     #[test]
