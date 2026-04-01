@@ -94,7 +94,7 @@ This version is specialized for speed and does not use a slower generic triple e
 
 ### `delfour`
 
-A Rust translation of Ruben Verborfg's Delfour Insight Economy phone/scanner demo in `src/delfour.rs`.
+A Rust translation of Ruben Verborgh's Delfour Insight Economy phone/scanner demo in `src/delfour.rs`.
 
 It models:
 
