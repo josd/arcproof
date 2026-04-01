@@ -11,6 +11,10 @@ fn run_case(arg: &str) -> std::process::Output {
     run_args(&[arg])
 }
 
+fn run_show(case_name: &str) -> std::process::Output {
+    run_args(&["show", case_name])
+}
+
 
 #[test]
 fn delfour_cli_reports_the_phone_and_scanner_flow() {
@@ -232,6 +236,28 @@ fn polynomial_cli_reports_both_expected_examples() {
     assert!(stdout.contains("degree/root count ok : yes"));
     assert!(stdout.contains("Vieta sum ok         : yes"));
     assert!(stdout.contains("Vieta product ok     : yes"));
+}
+
+#[test]
+fn show_command_matches_direct_case_output() {
+    let direct = run_case("sudoku");
+    assert!(direct.status.success());
+
+    let shown = run_show("sudoku");
+    assert!(shown.status.success());
+
+    assert_eq!(direct.stdout, shown.stdout);
+}
+
+#[test]
+fn show_command_accepts_json_mode() {
+    let output = run_args(&["show", "collatz-1000", "json"]);
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    let value: serde_json::Value = serde_json::from_str(&stdout).expect("valid json output");
+
+    assert_eq!(value["case"], "collatz-1000");
 }
 
 #[test]

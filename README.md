@@ -227,7 +227,6 @@ It models:
 - `src/path_discovery.rs` — path discovery benchmark translation plus generated airport and flight data
 - `src/polynomial.rs` — polynomial benchmark translation
 - `src/sudoku.rs` — generic Sudoku solver
-- `arcproof` — build, refresh, and check snapshot files
 
 ## Run
 
@@ -268,6 +267,15 @@ Structured JSON output for the whole suite:
 cargo run --release -- --all --format json
 ```
 
+Snapshot management from the repository root:
+
+```bash
+cargo run --release -- show sudoku
+cargo run --release -- show sudoku json
+cargo run --release -- refresh
+cargo run --release -- check
+```
+
 ## Stable output and snapshots
 
 arcproof supports two stable output forms:
@@ -282,23 +290,20 @@ The recommended workflow is:
 3. store checked-in snapshots for both
 4. refresh snapshots only when a case intentionally changes
 
-The root `arcproof` script is the main driver for this:
-
-Because snapshots are regular files in the repository, intentional output changes show up as normal diffs in version control. If you add or grow a case, run `./arcproof refresh`, review the snapshot diff, and commit it together with the code change.
-
+The `arcproof` binary handles this directly when you run it from the repository root. Because snapshots are regular files in the repository, intentional output changes show up as normal diffs in version control. If you add or grow a case, run `cargo run --release -- refresh`, review the snapshot diff, and commit it together with the code change.
 
 ```bash
-./arcproof refresh
-./arcproof check
+cargo run --release -- refresh
+cargo run --release -- check
 ```
 
 What it does:
 
-- builds the release binary
+- runs the current binary from the repository root
 - writes per-case text snapshots under `snapshots/text/`
 - writes per-case JSON snapshots under `snapshots/json/`
 - writes `all.txt`, `all.json`, and `list.txt`
-- diffs fresh output against the checked-in snapshots during `check`
+- compares fresh output against the checked-in snapshots during `check`
 
 That gives a practical separation between:
 
@@ -342,3 +347,6 @@ Each case prints a short three-part story:
 - **Check** — concrete validations and cross-checks that fail loudly on contradiction
 
 Where possible, the check section uses more than one line of evidence, so the program does not rely on a single computation path to certify its own output.
+
+
+Each case run also reports a precise elapsed time on stderr.

@@ -5,13 +5,13 @@ This directory holds the checked-in expected output for arcproof.
 Generate or refresh it with:
 
 ```bash
-./arcproof refresh
+cargo run --release -- refresh
 ```
 
 Then verify it with:
 
 ```bash
-./arcproof check
+cargo run --release -- check
 ```
 
 Text snapshots live in `snapshots/text/`.
