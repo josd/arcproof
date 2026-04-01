@@ -1,12 +1,14 @@
 # arcproof
 
-This repository contains twelve small, fast Rust ARC programs.
+Arcproof is a collection of generated, task-specific ARC programs that do more than produce an answer: they explain why the answer is correct and verify it with concrete checks.
 
-ARC stands for **Answer • Reason • Check**. An ARC program does more than emit a result. It gives:
+**ARC** stands for **Answer • Reason • Check**.
 
-- **Answer** — the result itself
-- **Reason Why** — a short witness, derivation, or explanation of why the result follows
-- **Check** — one or more concrete validations that fail loudly if an assumption is wrong, an edge case bites, or the answer contradicts an independent test
+An ARC program does three things:
+
+- **Answer** — produces the result
+- **Reason** — provides a short witness, derivation, or explanation showing why the result follows
+- **Check** — runs one or more explicit validations that fail loudly if an assumption is wrong, an edge case is missed, or the answer disagrees with an independent test
 
 A useful way to read this repository is as **teaching material for an LLM acting as a student programmer**. The target is not a mysterious giant system that emits polished text. The target is a small program that can be written, inspected, rerun, criticized, and improved. In that teaching setup, the student should learn to produce code that answers a precise question, explains its reasoning in a compact witness, and then verifies the result with explicit checks instead of asking for trust.
 
@@ -22,7 +24,7 @@ These examples are organized around a few simple ARC principles:
 - **Runtime verification is mandatory** — every case should validate key invariants during execution rather than relying on trust in the code or in the author
 - **Portable artifacts beat opaque sessions** — a small standalone program is easier to benchmark, automate, audit, archive, and compare across implementations
 
-In this repository, the programs are generated with GPT-5.4 and iteratively refined under human guidance. They are specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. Rather than using a generic logical reasoner, arcproof uses generated, task-specific Rust cases that follow an Answer–Reason–Check discipline. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
+In this repository, the programs are generated with GPT and iteratively refined under human guidance. They are specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. Rather than using a generic logical reasoner, arcproof uses generated, task-specific Rust cases that follow an Answer–Reason–Check discipline. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
 
 ## Why this style is useful
 
@@ -94,7 +96,7 @@ This version is specialized for speed and does not use a slower generic triple e
 
 ### `delfour`
 
-A Rust translation of the browser-side Delfour Insight Economy phone/scanner demo in `src/delfour.rs`.
+A Rust translation of Ruben Verborfg's Delfour Insight Economy phone/scanner demo in `src/delfour.rs`.
 
 It models:
 
