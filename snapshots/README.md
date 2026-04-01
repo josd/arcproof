@@ -1,17 +1,17 @@
 # Snapshots
 
-This directory holds the checked-in expected output for arc.
+This directory holds the checked-in expected output for arcproof.
 
 Generate or refresh it with:
 
 ```bash
-./arc refresh
+./arcproof refresh
 ```
 
 Then verify it with:
 
 ```bash
-./arc check
+./arcproof check
 ```
 
 Text snapshots live in `snapshots/text/`.
