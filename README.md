@@ -1,8 +1,6 @@
 # arcproof
 
-Arcproof is a collection of generated, task-specific ARC programs that do more than produce an answer: they explain why the answer is correct and verify it with concrete checks.
-
-**ARC** stands for **Answer • Reason • Check**.
+Arcproof is a collection of generated Rust cases built around ARC — Answer, Reason, Check — producing answers, explaining them, and verifying them with explicit checks.
 
 An ARC program does three things:
 
