@@ -55,7 +55,7 @@ That means the `Check` section is meant to resist self-certification. The best c
 
 ### `collatz-1000`
 
-A computational check of the Collatz conjecture in `src/collatz_1000.rs`.
+A computational check of the Collatz conjecture in [`src/collatz_1000.rs`](src/collatz_1000.rs).
 
 For CLI compatibility, the case name remains `collatz-1000`, while this version exhaustively verifies all starts from `1` through `10000`.
 
@@ -70,7 +70,7 @@ It models:
 
 ### `control-system`
 
-A small rule-based control example in `src/control_system.rs`.
+A small rule-based control example in [`src/control_system.rs`](src/control_system.rs).
 
 It models:
 
@@ -81,7 +81,7 @@ It models:
 
 ### `deep-taxonomy-100000`
 
-A specialized forward-chaining taxonomy benchmark in `src/deep_taxonomy_100000.rs`.
+A specialized forward-chaining taxonomy benchmark in [`src/deep_taxonomy_100000.rs`](src/deep_taxonomy_100000.rs).
 
 It models:
 
@@ -94,7 +94,7 @@ This version is specialized for speed and does not use a slower generic triple e
 
 ### `delfour`
 
-A Rust translation of Ruben Verborgh's Delfour Insight Economy phone/scanner demo in `src/delfour.rs`.
+A Rust translation of Ruben Verborgh's Delfour Insight Economy phone/scanner demo in [`src/delfour.rs`](src/delfour.rs).
 
 It models:
 
@@ -107,7 +107,7 @@ It models:
 
 ### `euler-identity`
 
-An exact arithmetic version of Euler's identity in `src/euler_identity.rs`.
+An exact arithmetic version of Euler's identity in [`src/euler_identity.rs`](src/euler_identity.rs).
 
 This version uses direct integer arithmetic over a small `ExactComplex` type.
 
@@ -120,7 +120,7 @@ It mirrors the mathematical structure:
 
 ### `fibonacci`
 
-A direct Fibonacci computation in `src/fibonacci.rs`.
+A direct Fibonacci computation in [`src/fibonacci.rs`](src/fibonacci.rs).
 
 This version computes the requested values with iterative Rust and `BigUint`.
 
@@ -134,7 +134,7 @@ It prints:
 
 ### `goldbach-1000`
 
-A computational check of Goldbach's conjecture in `src/goldbach_1000.rs`.
+A computational check of Goldbach's conjecture in [`src/goldbach_1000.rs`](src/goldbach_1000.rs).
 
 It models:
 
@@ -147,7 +147,7 @@ It models:
 
 ### `gps`
 
-A route-planning example in `src/gps.rs`.
+A route-planning example in [`src/gps.rs`](src/gps.rs).
 
 It models:
 
@@ -162,7 +162,7 @@ The translation uses Rust concepts like `City`, `Action`, `Stage`, `Description`
 
 ### `kaprekar-6174`
 
-A computational proof of Kaprekar's constant in `src/kaprekar_6174.rs`.
+A computational proof of Kaprekar's constant in [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs).
 
 It models:
 
@@ -175,7 +175,7 @@ It models:
 
 ### `polynomial`
 
-A quartic polynomial consistency check in `src/polynomial.rs`.
+A quartic polynomial consistency check in [`src/polynomial.rs`](src/polynomial.rs).
 
 It models the two quartic outputs shown in the original example material and verifies:
 
@@ -187,7 +187,7 @@ It models the two quartic outputs shown in the original example material and ver
 
 ### `path-discovery`
 
-A path-finding example in `src/path_discovery.rs`.
+A path-finding example in [`src/path_discovery.rs`](src/path_discovery.rs).
 
 It models:
 
@@ -200,7 +200,7 @@ It models:
 
 ### `sudoku`
 
-A generic Sudoku solver in `src/sudoku.rs`.
+A generic Sudoku solver in [`src/sudoku.rs`](src/sudoku.rs).
 
 It models:
 
@@ -213,20 +213,20 @@ It models:
 
 ## Files
 
-- `src/main.rs` — CLI dispatcher
-- `src/report.rs` — structured ARC report model used for JSON output
-- `src/collatz_1000.rs` — Collatz conjecture benchmark translation
-- `src/control_system.rs` — control system benchmark translation
-- `src/deep_taxonomy_100000.rs` — specialized taxonomy benchmark
-- `src/delfour.rs` — Delfour phone/scanner insight example
-- `src/euler_identity.rs` — Euler identity benchmark translation
-- `src/fibonacci.rs` — Fibonacci benchmark translation
-- `src/goldbach_1000.rs` — Goldbach conjecture benchmark translation
-- `src/gps.rs` — GPS benchmark translation
-- `src/kaprekar_6174.rs` — Kaprekar 6174 proof example
-- `src/path_discovery.rs` — path discovery benchmark translation plus generated airport and flight data
-- `src/polynomial.rs` — polynomial benchmark translation
-- `src/sudoku.rs` — generic Sudoku solver
+- [`src/main.rs`](src/main.rs) — CLI dispatcher
+- [`src/report.rs`](src/report.rs) — structured ARC report model used for JSON output
+- [`src/collatz_1000.rs`](src/collatz_1000.rs) — Collatz conjecture benchmark translation
+- [`src/control_system.rs`](src/control_system.rs) — control system benchmark translation
+- [`src/deep_taxonomy_100000.rs`](src/deep_taxonomy_100000.rs) — specialized taxonomy benchmark
+- [`src/delfour.rs`](src/delfour.rs) — Delfour phone/scanner insight example
+- [`src/euler_identity.rs`](src/euler_identity.rs) — Euler identity benchmark translation
+- [`src/fibonacci.rs`](src/fibonacci.rs) — Fibonacci benchmark translation
+- [`src/goldbach_1000.rs`](src/goldbach_1000.rs) — Goldbach conjecture benchmark translation
+- [`src/gps.rs`](src/gps.rs) — GPS benchmark translation
+- [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs) — Kaprekar 6174 proof example
+- [`src/path_discovery.rs`](src/path_discovery.rs) — path discovery benchmark translation plus generated airport and flight data
+- [`src/polynomial.rs`](src/polynomial.rs) — polynomial benchmark translation
+- [`src/sudoku.rs`](src/sudoku.rs) — generic Sudoku solver
 
 ## Run
 
@@ -300,8 +300,8 @@ cargo run --release -- check
 What it does:
 
 - runs the current binary from the repository root
-- writes per-case text snapshots under `snapshots/text/`
-- writes per-case JSON snapshots under `snapshots/json/`
+- writes per-case text snapshots under [`snapshots/text/`](snapshots/text/)
+- writes per-case JSON snapshots under [`snapshots/json/`](snapshots/json/)
 - writes `all.txt`, `all.json`, and `list.txt`
 - compares fresh output against the checked-in snapshots during `check`
 
