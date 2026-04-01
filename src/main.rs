@@ -327,22 +327,26 @@ fn emit_json_report(report: &CaseReport, mut writer: impl Write) -> io::Result<(
 }
 
 
-fn format_elapsed(duration: Duration) -> String {
-    let nanos = duration.as_nanos();
+const TIMING_COLOR: &str = "\x1b[38;5;45m";
+const TIMING_ERROR_COLOR: &str = "\x1b[38;5;203m";
+const ANSI_RESET: &str = "\x1b[0m";
 
-    if nanos < 1_000 {
-        format!("{nanos} ns")
-    } else if nanos < 1_000_000 {
-        format!("{:.3} µs", nanos as f64 / 1_000.0)
-    } else if nanos < 1_000_000_000 {
-        format!("{:.3} ms", nanos as f64 / 1_000_000.0)
-    } else {
-        format!("{:.6} s", nanos as f64 / 1_000_000_000.0)
-    }
+fn format_elapsed(duration: Duration) -> String {
+    format!("{:.3} ms", duration.as_secs_f64() * 1_000.0)
 }
 
 fn print_timing(label: &str, duration: Duration) {
-    eprintln!("[timing] {label}: {}", format_elapsed(duration));
+    eprintln!(
+        "{TIMING_COLOR}[timing]{ANSI_RESET} {label}: {}",
+        format_elapsed(duration)
+    );
+}
+
+fn print_timing_failure(label: &str, duration: Duration, error: &io::Error) {
+    eprintln!(
+        "{TIMING_ERROR_COLOR}[timing]{ANSI_RESET} {label} failed after {}: {error}",
+        format_elapsed(duration)
+    );
 }
 
 fn with_case_timing<T>(case_name: CaseName, action: impl FnOnce() -> io::Result<T>) -> io::Result<T> {
@@ -353,7 +357,7 @@ fn with_case_timing<T>(case_name: CaseName, action: impl FnOnce() -> io::Result<
 
     match &result {
         Ok(_) => print_timing(&label, duration),
-        Err(error) => eprintln!("[timing] {label} failed after {}: {error}", format_elapsed(duration)),
+        Err(error) => print_timing_failure(&label, duration, error),
     }
 
     result
@@ -530,7 +534,7 @@ fn capture_snapshot(label: &str, args: &[&str]) -> io::Result<Vec<u8>> {
 
     match &result {
         Ok(_) => print_timing(label, duration),
-        Err(error) => eprintln!("[timing] {label} failed after {}: {error}", format_elapsed(duration)),
+        Err(error) => print_timing_failure(&label, duration, error),
     }
 
     result
@@ -822,10 +826,11 @@ mod tests {
     }
 
     #[test]
-    fn formats_precise_elapsed_times_across_scales() {
-        assert_eq!(format_elapsed(Duration::from_nanos(999)), "999 ns");
-        assert_eq!(format_elapsed(Duration::from_nanos(1_234)), "1.234 µs");
+    fn formats_elapsed_times_in_milliseconds() {
+        assert_eq!(format_elapsed(Duration::from_nanos(500)), "0.001 ms");
+        assert_eq!(format_elapsed(Duration::from_nanos(499)), "0.000 ms");
+        assert_eq!(format_elapsed(Duration::from_nanos(1_234)), "0.001 ms");
         assert_eq!(format_elapsed(Duration::from_nanos(12_345_678)), "12.346 ms");
-        assert_eq!(format_elapsed(Duration::from_nanos(1_234_567_890)), "1.234568 s");
+        assert_eq!(format_elapsed(Duration::from_nanos(1_234_567_890)), "1234.568 ms");
     }
 }

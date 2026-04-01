@@ -349,4 +349,4 @@ Each case prints a short three-part story:
 Where possible, the check section uses more than one line of evidence, so the program does not rely on a single computation path to certify its own output.
 
 
-Each case run also reports a precise elapsed time on stderr.
+Each case run also reports elapsed time in milliseconds on stderr, with ANSI color for the timing line.
