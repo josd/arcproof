@@ -9,5 +9,6 @@ gps
 kaprekar-6174
 matrix-mechanics
 path-discovery
+pn-junction-tunneling
 polynomial
 sudoku

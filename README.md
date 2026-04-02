@@ -195,6 +195,18 @@ It models:
 - explicit computation of `HX`, `XH`, and the commutator `[H, X]`
 - checks that the spectrum is correct and that matrix order matters
 
+### `pn-junction-tunneling`
+
+A toy PN-junction tunneling example inspired by tunnel-diode / Esaki-diode behavior in [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs).
+
+It models:
+
+- an ordinary junction and a heavily doped junction with different depletion widths
+- filled N-side states and empty P-side states as small exact integer energy sets
+- a forward-bias shift that changes the overlap window for tunneling
+- a current proxy computed as the exact overlap count at each bias step
+- checks that the overlap rises to a peak and then falls, illustrating a negative-differential region
+
 ### `polynomial`
 
 A quartic polynomial consistency check in [`src/polynomial.rs`](src/polynomial.rs).
@@ -246,7 +258,9 @@ It models:
 - [`src/goldbach_1000.rs`](src/goldbach_1000.rs) — Goldbach conjecture benchmark translation
 - [`src/gps.rs`](src/gps.rs) — GPS benchmark translation
 - [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs) — Kaprekar 6174 proof example
+- [`src/matrix_mechanics.rs`](src/matrix_mechanics.rs) — matrix mechanics toy example
 - [`src/path_discovery.rs`](src/path_discovery.rs) — path discovery benchmark translation plus generated airport and flight data
+- [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs) — PN-junction tunneling toy example
 - [`src/polynomial.rs`](src/polynomial.rs) — polynomial benchmark translation
 - [`src/sudoku.rs`](src/sudoku.rs) — generic Sudoku solver
 
@@ -274,6 +288,7 @@ cargo run --release -- gps
 cargo run --release -- kaprekar-6174
 cargo run --release -- matrix-mechanics
 cargo run --release -- path-discovery
+cargo run --release -- pn-junction-tunneling
 cargo run --release -- polynomial
 cargo run --release -- sudoku
 ```

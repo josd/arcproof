@@ -17,13 +17,14 @@ mod gps;
 mod kaprekar_6174;
 mod matrix_mechanics;
 mod path_discovery;
+mod pn_junction_tunneling;
 mod polynomial;
 mod report;
 mod sudoku;
 
 use report::CaseReport;
 
-const CASE_NAMES: [&str; 13] = [
+const CASE_NAMES: [&str; 14] = [
     "collatz-1000",
     "control-system",
     "deep-taxonomy-100000",
@@ -35,6 +36,7 @@ const CASE_NAMES: [&str; 13] = [
     "kaprekar-6174",
     "matrix-mechanics",
     "path-discovery",
+    "pn-junction-tunneling",
     "polynomial",
     "sudoku",
 ];
@@ -58,6 +60,7 @@ enum CaseName {
     Kaprekar6174,
     MatrixMechanics,
     PathDiscovery,
+    PnJunctionTunneling,
     Polynomial,
     Sudoku,
 }
@@ -76,6 +79,7 @@ impl CaseName {
             CaseName::Kaprekar6174 => "kaprekar-6174",
             CaseName::MatrixMechanics => "matrix-mechanics",
             CaseName::PathDiscovery => "path-discovery",
+            CaseName::PnJunctionTunneling => "pn-junction-tunneling",
             CaseName::Polynomial => "polynomial",
             CaseName::Sudoku => "sudoku",
         }
@@ -171,6 +175,7 @@ fn parse_case_name(raw: &str) -> io::Result<CaseName> {
         "kaprekar-6174" | "kaprekar_6174" => Ok(CaseName::Kaprekar6174),
         "matrix-mechanics" | "matrix_mechanics" | "matrix" => Ok(CaseName::MatrixMechanics),
         "path-discovery" | "path_discovery" => Ok(CaseName::PathDiscovery),
+        "pn-junction-tunneling" | "pn_junction_tunneling" | "pn-junction" | "pn_junction" | "tunnel-diode" => Ok(CaseName::PnJunctionTunneling),
         "polynomial" => Ok(CaseName::Polynomial),
         "sudoku" => Ok(CaseName::Sudoku),
         other => Err(io::Error::new(
@@ -321,6 +326,7 @@ fn case_report(case_name: CaseName) -> io::Result<CaseReport> {
         CaseName::Kaprekar6174 => kaprekar_6174::report(),
         CaseName::MatrixMechanics => matrix_mechanics::report(),
         CaseName::PathDiscovery => path_discovery::report(),
+        CaseName::PnJunctionTunneling => pn_junction_tunneling::report(),
         CaseName::Polynomial => polynomial::report(),
         CaseName::Sudoku => sudoku::report(),
     }
@@ -382,12 +388,13 @@ fn run_case_text(case_name: CaseName) -> io::Result<()> {
         CaseName::Kaprekar6174 => kaprekar_6174::run_and_print(),
         CaseName::MatrixMechanics => matrix_mechanics::run_and_print(),
         CaseName::PathDiscovery => path_discovery::run_and_print(),
+        CaseName::PnJunctionTunneling => pn_junction_tunneling::run_and_print(),
         CaseName::Polynomial => polynomial::run_and_print(),
         CaseName::Sudoku => sudoku::run_and_print(),
     }
 }
 
-fn all_case_names() -> [CaseName; 13] {
+fn all_case_names() -> [CaseName; 14] {
     [
         CaseName::Collatz1000,
         CaseName::ControlSystem,
@@ -400,6 +407,7 @@ fn all_case_names() -> [CaseName; 13] {
         CaseName::Kaprekar6174,
         CaseName::MatrixMechanics,
         CaseName::PathDiscovery,
+        CaseName::PnJunctionTunneling,
         CaseName::Polynomial,
         CaseName::Sudoku,
     ]
@@ -408,7 +416,7 @@ fn all_case_names() -> [CaseName; 13] {
 fn run_all_cases(format: OutputFormat) -> io::Result<()> {
     match format {
         OutputFormat::Text => {
-            let runners: [(CaseName, fn() -> io::Result<()>); 13] = [
+            let runners: [(CaseName, fn() -> io::Result<()>); 14] = [
                 (CaseName::Collatz1000, collatz_1000::run_and_print),
                 (CaseName::ControlSystem, control_system::run_and_print),
                 (CaseName::DeepTaxonomy100000, deep_taxonomy_100000::run_and_print),
@@ -420,6 +428,7 @@ fn run_all_cases(format: OutputFormat) -> io::Result<()> {
                 (CaseName::Kaprekar6174, kaprekar_6174::run_and_print),
                 (CaseName::MatrixMechanics, matrix_mechanics::run_and_print),
                 (CaseName::PathDiscovery, path_discovery::run_and_print),
+                (CaseName::PnJunctionTunneling, pn_junction_tunneling::run_and_print),
                 (CaseName::Polynomial, polynomial::run_and_print),
                 (CaseName::Sudoku, sudoku::run_and_print),
             ];
@@ -743,8 +752,6 @@ fn main() -> io::Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeSet;
-
     use super::*;
 
     #[test]
@@ -767,6 +774,10 @@ mod tests {
         assert!(matches!(parse_case_name("kaprekar_6174").unwrap(), CaseName::Kaprekar6174));
         assert!(matches!(parse_case_name("path-discovery").unwrap(), CaseName::PathDiscovery));
         assert!(matches!(parse_case_name("path_discovery").unwrap(), CaseName::PathDiscovery));
+        assert!(matches!(parse_case_name("pn-junction-tunneling").unwrap(), CaseName::PnJunctionTunneling));
+        assert!(matches!(parse_case_name("pn_junction_tunneling").unwrap(), CaseName::PnJunctionTunneling));
+        assert!(matches!(parse_case_name("pn-junction").unwrap(), CaseName::PnJunctionTunneling));
+        assert!(matches!(parse_case_name("tunnel-diode").unwrap(), CaseName::PnJunctionTunneling));
         assert!(matches!(parse_case_name("polynomial").unwrap(), CaseName::Polynomial));
         assert!(matches!(parse_case_name("sudoku").unwrap(), CaseName::Sudoku));
     }
@@ -825,18 +836,20 @@ mod tests {
 
     #[test]
     fn expected_snapshot_list_covers_suite_and_indexes() {
+        use std::collections::BTreeSet;
+
         let root = Path::new(".");
         let expected = expected_snapshot_paths(root);
-        let expected_set: BTreeSet<_> = expected.iter().cloned().collect();
+        let unique: BTreeSet<_> = expected.iter().collect();
 
-        assert_eq!(expected.len(), expected_set.len(), "snapshot paths should be unique");
+        assert_eq!(unique.len(), expected.len());
         assert!(expected.contains(&root.join("snapshots/text/list.txt")));
         assert!(expected.contains(&root.join("snapshots/text/all.txt")));
         assert!(expected.contains(&root.join("snapshots/json/all.json")));
 
         for case in CASE_NAMES {
-            assert!(expected.contains(&root.join("snapshots/text").join(format!("{case}.txt"))));
-            assert!(expected.contains(&root.join("snapshots/json").join(format!("{case}.json"))));
+            assert!(expected.contains(&root.join(format!("snapshots/text/{case}.txt"))));
+            assert!(expected.contains(&root.join(format!("snapshots/json/{case}.json"))));
         }
     }
 

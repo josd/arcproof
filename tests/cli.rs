@@ -16,6 +16,19 @@ fn run_show(case_name: &str) -> std::process::Output {
     run_args(&["show", case_name])
 }
 
+fn listed_cases() -> BTreeSet<String> {
+    let output = run_case("--list");
+    assert!(output.status.success());
+
+    String::from_utf8(output.stdout)
+        .expect("stdout should be valid utf-8")
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .map(ToOwned::to_owned)
+        .collect()
+}
+
 
 #[test]
 fn delfour_cli_reports_the_phone_and_scanner_flow() {
@@ -95,6 +108,7 @@ fn list_shows_all_available_cases() {
     assert!(stdout.contains("kaprekar-6174"));
     assert!(stdout.contains("matrix-mechanics"));
     assert!(stdout.contains("path-discovery"));
+    assert!(stdout.contains("pn-junction-tunneling"));
     assert!(stdout.contains("polynomial"));
     assert!(stdout.contains("sudoku"));
 }
@@ -195,6 +209,22 @@ fn matrix_mechanics_cli_reports_noncommuting_observables() {
     assert!(stdout.contains("determinant matches levels  : yes"));
     assert!(stdout.contains("X^2 = I                     : yes"));
     assert!(stdout.contains("[H, X] != 0                : yes"));
+}
+
+#[test]
+fn pn_junction_tunneling_cli_reports_the_overlap_window() {
+    let output = run_case("pn-junction-tunneling");
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    assert!(stdout.contains("case                          : pn-junction-tunneling"));
+    assert!(stdout.contains("peak bias                     : 2"));
+    assert!(stdout.contains("peak current proxy            : 4"));
+    assert!(stdout.contains("ordinary depletion width (nm) : 8"));
+    assert!(stdout.contains("tunnel depletion width (nm)   : 1"));
+    assert!(stdout.contains("bias -> overlap current proxy : 0->2, 1->3, 2->4, 3->3, 4->2, 5->1, 6->0"));
+    assert!(stdout.contains("negative differential region present : yes"));
+    assert!(stdout.contains("high-bias overlap closes           : yes"));
 }
 
 #[test]
@@ -325,40 +355,24 @@ fn sudoku_cli_reports_the_default_puzzle_solution() {
 }
 
 #[test]
-fn json_output_for_all_cases_matches_the_list_command_without_assuming_order() {
-    let all_output = run_args(&["--all", "--format", "json"]);
-    assert!(all_output.status.success());
+fn json_output_for_all_cases_matches_the_listed_case_set() {
+    let output = run_args(&["--all", "--format", "json"]);
+    assert!(output.status.success());
 
-    let all_stdout = String::from_utf8(all_output.stdout).expect("stdout should be valid utf-8");
-    let value: serde_json::Value = serde_json::from_str(&all_stdout).expect("valid json output");
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    let value: serde_json::Value = serde_json::from_str(&stdout).expect("valid json output");
 
     let reports = value.as_array().expect("top-level json array");
-    assert!(!reports.is_empty(), "--all should emit at least one report");
-
-    let listed_output = run_case("--list");
-    assert!(listed_output.status.success());
-    let listed_stdout = String::from_utf8(listed_output.stdout).expect("stdout should be valid utf-8");
-    let listed_cases: BTreeSet<&str> = listed_stdout
-        .lines()
-        .map(str::trim)
-        .filter(|line| !line.is_empty())
-        .collect();
-
-    let report_cases: BTreeSet<&str> = reports
+    let report_cases: BTreeSet<String> = reports
         .iter()
         .map(|report| {
+            assert!(report["case"].is_string());
             assert!(report["answer"].is_array());
             assert!(report["reason_why"].is_array());
             assert!(report["check"].is_array());
-            report["case"]
-                .as_str()
-                .expect("every report should have a string case name")
+            report["case"].as_str().expect("case name should be a string").to_owned()
         })
         .collect();
 
-    assert_eq!(report_cases, listed_cases);
-    assert!(report_cases.contains("collatz-1000"));
-    assert!(report_cases.contains("matrix-mechanics"));
-    assert!(report_cases.contains("polynomial"));
-    assert!(report_cases.contains("sudoku"));
+    assert_eq!(report_cases, listed_cases());
 }
