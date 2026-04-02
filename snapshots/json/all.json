@@ -556,7 +556,7 @@
       },
       {
         "kind": "field",
-        "label": "primes \u2264 1000",
+        "label": "primes ≤ 1000",
         "value": "168"
       },
       {
@@ -628,27 +628,27 @@
       {
         "kind": "field",
         "label": "Duration",
-        "value": "2400 s (\u2264 5000)"
+        "value": "2400 s (≤ 5000)"
       },
       {
         "kind": "field",
         "label": "Cost",
-        "value": "0.010 (\u2264 5.0)"
+        "value": "0.010 (≤ 5.0)"
       },
       {
         "kind": "field",
         "label": "Belief",
-        "value": "0.941 (\u2265 0.2)"
+        "value": "0.941 (≥ 0.2)"
       },
       {
         "kind": "field",
         "label": "Comfort",
-        "value": "0.990 (\u2265 0.4)"
+        "value": "0.990 (≥ 0.4)"
       },
       {
         "kind": "field",
         "label": "Stages",
-        "value": "1 (\u2264 1)"
+        "value": "1 (≤ 1)"
       },
       {
         "kind": "text",
@@ -670,27 +670,27 @@
       {
         "kind": "field",
         "label": "Duration",
-        "value": "4100 s (\u2264 5000)"
+        "value": "4100 s (≤ 5000)"
       },
       {
         "kind": "field",
         "label": "Cost",
-        "value": "0.018 (\u2264 5.0)"
+        "value": "0.018 (≤ 5.0)"
       },
       {
         "kind": "field",
         "label": "Belief",
-        "value": "0.903 (\u2265 0.2)"
+        "value": "0.903 (≥ 0.2)"
       },
       {
         "kind": "field",
         "label": "Comfort",
-        "value": "0.980 (\u2265 0.4)"
+        "value": "0.980 (≥ 0.4)"
       },
       {
         "kind": "field",
         "label": "Stages",
-        "value": "1 (\u2264 1)"
+        "value": "1 (≤ 1)"
       },
       {
         "kind": "text",
@@ -937,7 +937,7 @@
     "answer": [
       {
         "kind": "text",
-        "text": "The path-discovery case finds every simple route from Ostend-Bruges International Airport to V\u00e1clav Havel Airport Prague with at most two stopovers."
+        "text": "The path-discovery case finds every simple route from Ostend-Bruges International Airport to Václav Havel Airport Prague with at most two stopovers."
       },
       {
         "kind": "field",
@@ -973,7 +973,7 @@
       {
         "kind": "field",
         "label": "destination",
-        "value": "V\u00e1clav Havel Airport Prague"
+        "value": "Václav Havel Airport Prague"
       },
       {
         "kind": "field",
@@ -992,7 +992,7 @@
       {
         "kind": "field",
         "label": "Airports",
-        "value": "Ostend-Bruges International Airport -> Li\u00e8ge Airport -> Heraklion International Nikos Kazantzakis Airport -> V\u00e1clav Havel Airport Prague"
+        "value": "Ostend-Bruges International Airport -> Liège Airport -> Heraklion International Nikos Kazantzakis Airport -> Václav Havel Airport Prague"
       },
       {
         "kind": "text",
@@ -1006,7 +1006,7 @@
       {
         "kind": "field",
         "label": "Airports",
-        "value": "Ostend-Bruges International Airport -> Li\u00e8ge Airport -> Diagoras Airport -> V\u00e1clav Havel Airport Prague"
+        "value": "Ostend-Bruges International Airport -> Liège Airport -> Diagoras Airport -> Václav Havel Airport Prague"
       },
       {
         "kind": "text",
@@ -1020,7 +1020,7 @@
       {
         "kind": "field",
         "label": "Airports",
-        "value": "Ostend-Bruges International Airport -> Li\u00e8ge Airport -> Palma De Mallorca Airport -> V\u00e1clav Havel Airport Prague"
+        "value": "Ostend-Bruges International Airport -> Liège Airport -> Palma De Mallorca Airport -> Václav Havel Airport Prague"
       }
     ],
     "check": [
@@ -1337,7 +1337,7 @@
     "reason_why": [
       {
         "kind": "text",
-        "text": "The solver starts from 23 clues and fills the remaining 58 cells by combining constraint propagation with depth-first search. At each step it chooses the empty cell with the fewest legal digits, places forced singles immediately, and only guesses when more than one candidate remains. Across the search it made 213 forced placements and tried 22 guesses, visited 23 search nodes overall, and backtracked 12 times before reaching the completed grid. The solver also confirmed that the solution is unique. Early steps: r2c3=4: guess, r5c3=3: forced, r2c1=5: guess, r2c4=1: guess, r2c6=9: forced, r2c7=6: guess, r2c8=7: forced, r1c7=4: guess, \u2026 and 50 more placements"
+        "text": "The solver starts from 23 clues and fills the remaining 58 cells by combining constraint propagation with depth-first search. At each step it chooses the empty cell with the fewest legal digits, places forced singles immediately, and only guesses when more than one candidate remains. Across the search it made 213 forced placements and tried 22 guesses, visited 23 search nodes overall, and backtracked 12 times before reaching the completed grid. The solver also confirmed that the solution is unique. Early steps: r2c3=4: guess, r5c3=3: forced, r2c1=5: guess, r2c4=1: guess, r2c6=9: forced, r2c7=6: guess, r2c8=7: forced, r1c7=4: guess, … and 50 more placements"
       }
     ],
     "check": [
@@ -1359,7 +1359,7 @@
       },
       {
         "kind": "text",
-        "text": "C5 OK - each 3\u00d73 box contains every digit exactly once."
+        "text": "C5 OK - each 3×3 box contains every digit exactly once."
       },
       {
         "kind": "text",
