@@ -19,12 +19,13 @@ mod matrix_mechanics;
 mod path_discovery;
 mod pn_junction_tunneling;
 mod polynomial;
+mod transistor_switch;
 mod report;
 mod sudoku;
 
 use report::CaseReport;
 
-const CASE_NAMES: [&str; 14] = [
+const CASE_NAMES: [&str; 15] = [
     "collatz-1000",
     "control-system",
     "deep-taxonomy-100000",
@@ -38,6 +39,7 @@ const CASE_NAMES: [&str; 14] = [
     "path-discovery",
     "pn-junction-tunneling",
     "polynomial",
+    "transistor-switch",
     "sudoku",
 ];
 
@@ -62,6 +64,7 @@ enum CaseName {
     PathDiscovery,
     PnJunctionTunneling,
     Polynomial,
+    TransistorSwitch,
     Sudoku,
 }
 
@@ -81,6 +84,7 @@ impl CaseName {
             CaseName::PathDiscovery => "path-discovery",
             CaseName::PnJunctionTunneling => "pn-junction-tunneling",
             CaseName::Polynomial => "polynomial",
+            CaseName::TransistorSwitch => "transistor-switch",
             CaseName::Sudoku => "sudoku",
         }
     }
@@ -177,6 +181,7 @@ fn parse_case_name(raw: &str) -> io::Result<CaseName> {
         "path-discovery" | "path_discovery" => Ok(CaseName::PathDiscovery),
         "pn-junction-tunneling" | "pn_junction_tunneling" | "pn-junction" | "pn_junction" | "tunnel-diode" => Ok(CaseName::PnJunctionTunneling),
         "polynomial" => Ok(CaseName::Polynomial),
+        "transistor-switch" | "transistor_switch" | "transistor" => Ok(CaseName::TransistorSwitch),
         "sudoku" => Ok(CaseName::Sudoku),
         other => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
@@ -328,6 +333,7 @@ fn case_report(case_name: CaseName) -> io::Result<CaseReport> {
         CaseName::PathDiscovery => path_discovery::report(),
         CaseName::PnJunctionTunneling => pn_junction_tunneling::report(),
         CaseName::Polynomial => polynomial::report(),
+        CaseName::TransistorSwitch => transistor_switch::report(),
         CaseName::Sudoku => sudoku::report(),
     }
 }
@@ -390,11 +396,12 @@ fn run_case_text(case_name: CaseName) -> io::Result<()> {
         CaseName::PathDiscovery => path_discovery::run_and_print(),
         CaseName::PnJunctionTunneling => pn_junction_tunneling::run_and_print(),
         CaseName::Polynomial => polynomial::run_and_print(),
+        CaseName::TransistorSwitch => transistor_switch::run_and_print(),
         CaseName::Sudoku => sudoku::run_and_print(),
     }
 }
 
-fn all_case_names() -> [CaseName; 14] {
+fn all_case_names() -> [CaseName; 15] {
     [
         CaseName::Collatz1000,
         CaseName::ControlSystem,
@@ -409,6 +416,7 @@ fn all_case_names() -> [CaseName; 14] {
         CaseName::PathDiscovery,
         CaseName::PnJunctionTunneling,
         CaseName::Polynomial,
+        CaseName::TransistorSwitch,
         CaseName::Sudoku,
     ]
 }
@@ -416,7 +424,7 @@ fn all_case_names() -> [CaseName; 14] {
 fn run_all_cases(format: OutputFormat) -> io::Result<()> {
     match format {
         OutputFormat::Text => {
-            let runners: [(CaseName, fn() -> io::Result<()>); 14] = [
+            let runners: [(CaseName, fn() -> io::Result<()>); 15] = [
                 (CaseName::Collatz1000, collatz_1000::run_and_print),
                 (CaseName::ControlSystem, control_system::run_and_print),
                 (CaseName::DeepTaxonomy100000, deep_taxonomy_100000::run_and_print),
@@ -430,6 +438,7 @@ fn run_all_cases(format: OutputFormat) -> io::Result<()> {
                 (CaseName::PathDiscovery, path_discovery::run_and_print),
                 (CaseName::PnJunctionTunneling, pn_junction_tunneling::run_and_print),
                 (CaseName::Polynomial, polynomial::run_and_print),
+                (CaseName::TransistorSwitch, transistor_switch::run_and_print),
                 (CaseName::Sudoku, sudoku::run_and_print),
             ];
 
@@ -779,6 +788,9 @@ mod tests {
         assert!(matches!(parse_case_name("pn-junction").unwrap(), CaseName::PnJunctionTunneling));
         assert!(matches!(parse_case_name("tunnel-diode").unwrap(), CaseName::PnJunctionTunneling));
         assert!(matches!(parse_case_name("polynomial").unwrap(), CaseName::Polynomial));
+        assert!(matches!(parse_case_name("transistor-switch").unwrap(), CaseName::TransistorSwitch));
+        assert!(matches!(parse_case_name("transistor_switch").unwrap(), CaseName::TransistorSwitch));
+        assert!(matches!(parse_case_name("transistor").unwrap(), CaseName::TransistorSwitch));
         assert!(matches!(parse_case_name("sudoku").unwrap(), CaseName::Sudoku));
     }
 

@@ -207,6 +207,18 @@ It models:
 - a current proxy computed as the exact overlap count at each bias step
 - checks that the overlap rises to a peak and then falls, illustrating a negative-differential region
 
+### `transistor-switch`
+
+A toy transistor-switch example inspired by a BJT used as an ON/OFF switch in [`src/transistor_switch.rs`](src/transistor_switch.rs).
+
+It models:
+
+- an NPN transistor as a low-side switch rather than as a linear amplifier
+- exact millivolt and microamp arithmetic for the base and collector paths
+- cutoff for a low control input and saturation for a high control input
+- collector current as the smaller of the gain-limited and load-limited currents
+- checks that the OFF state carries no load current and the ON state is load-limited in saturation
+
 ### `polynomial`
 
 A quartic polynomial consistency check in [`src/polynomial.rs`](src/polynomial.rs).
@@ -262,6 +274,7 @@ It models:
 - [`src/path_discovery.rs`](src/path_discovery.rs) — path discovery benchmark translation plus generated airport and flight data
 - [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs) — PN-junction tunneling toy example
 - [`src/polynomial.rs`](src/polynomial.rs) — polynomial benchmark translation
+- [`src/transistor_switch.rs`](src/transistor_switch.rs) — transistor as on/off switch toy example
 - [`src/sudoku.rs`](src/sudoku.rs) — generic Sudoku solver
 
 ## Run
@@ -290,6 +303,7 @@ cargo run --release -- matrix-mechanics
 cargo run --release -- path-discovery
 cargo run --release -- pn-junction-tunneling
 cargo run --release -- polynomial
+cargo run --release -- transistor-switch
 cargo run --release -- sudoku
 ```
 

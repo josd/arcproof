@@ -1,0 +1,102 @@
+{
+  "case": "transistor-switch",
+  "answer": [
+    {
+      "kind": "text",
+      "text": "In this toy transistor-switch model, a low input leaves the transistor in cutoff (OFF) and a high input drives it into saturation (ON), so the load behaves like an on/off branch rather than a linear amplifier."
+    },
+    {
+      "kind": "field",
+      "label": "case",
+      "value": "transistor-switch"
+    },
+    {
+      "kind": "field",
+      "label": "low input state",
+      "value": "cutoff / OFF"
+    },
+    {
+      "kind": "field",
+      "label": "high input state",
+      "value": "saturation / ON"
+    },
+    {
+      "kind": "field",
+      "label": "on-state load current",
+      "value": "4.80 mA"
+    }
+  ],
+  "reason_why": [
+    {
+      "kind": "text",
+      "text": "We model an NPN low-side switch with exact millivolt and microamp arithmetic. The base current comes from (Vin - Vbe)/Rb when the base-emitter junction is forward biased, and the collector current is the smaller of beta * Ib and the load-limited current (Vcc - Vce,sat)/Rl."
+    },
+    {
+      "kind": "field",
+      "label": "supply voltage",
+      "value": "5.00 V"
+    },
+    {
+      "kind": "field",
+      "label": "base resistor",
+      "value": "10000 ohms"
+    },
+    {
+      "kind": "field",
+      "label": "load resistor",
+      "value": "1000 ohms"
+    },
+    {
+      "kind": "field",
+      "label": "transistor beta proxy",
+      "value": "100"
+    },
+    {
+      "kind": "field",
+      "label": "low input",
+      "value": "Vin=0.00 V -> Ib=0.00 mA, Ic=0.00 mA, Vce=5.00 V, state=cutoff / OFF"
+    },
+    {
+      "kind": "field",
+      "label": "high input",
+      "value": "Vin=5.00 V -> Ib=0.43 mA, Ic=4.80 mA, Vce=0.20 V, state=saturation / ON"
+    },
+    {
+      "kind": "field",
+      "label": "high-input gain limit",
+      "value": "43.00 mA"
+    },
+    {
+      "kind": "field",
+      "label": "high-input load limit",
+      "value": "4.80 mA"
+    }
+  ],
+  "check": [
+    {
+      "kind": "field",
+      "label": "low input stays in cutoff",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "high input reaches saturation",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "switching states differ",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "on-state current is load-limited",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "load voltage matches resistor drop",
+      "value": "yes"
+    }
+  ]
+}

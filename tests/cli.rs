@@ -110,6 +110,7 @@ fn list_shows_all_available_cases() {
     assert!(stdout.contains("path-discovery"));
     assert!(stdout.contains("pn-junction-tunneling"));
     assert!(stdout.contains("polynomial"));
+    assert!(stdout.contains("transistor-switch"));
     assert!(stdout.contains("sudoku"));
 }
 
@@ -225,6 +226,29 @@ fn pn_junction_tunneling_cli_reports_the_overlap_window() {
     assert!(stdout.contains("bias -> overlap current proxy : 0->2, 1->3, 2->4, 3->3, 4->2, 5->1, 6->0"));
     assert!(stdout.contains("negative differential region present : yes"));
     assert!(stdout.contains("high-bias overlap closes           : yes"));
+}
+
+
+#[test]
+fn transistor_switch_cli_reports_cutoff_and_saturation() {
+    let output = run_case("transistor-switch");
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    assert!(stdout.contains("case                             : transistor-switch"));
+    assert!(stdout.contains("low input state                  : cutoff / OFF"));
+    assert!(stdout.contains("high input state                 : saturation / ON"));
+    assert!(stdout.contains("on-state load current            : 4.80 mA"));
+    assert!(stdout.contains("supply voltage                   : 5.00 V"));
+    assert!(stdout.contains("base resistor                    : 10000 ohms"));
+    assert!(stdout.contains("load resistor                    : 1000 ohms"));
+    assert!(stdout.contains("low input                        : Vin=0.00 V -> Ib=0.00 mA, Ic=0.00 mA, Vce=5.00 V, state=cutoff / OFF"));
+    assert!(stdout.contains("high input                       : Vin=5.00 V -> Ib=0.43 mA, Ic=4.80 mA, Vce=0.20 V, state=saturation / ON"));
+    assert!(stdout.contains("high-input gain limit            : 43.00 mA"));
+    assert!(stdout.contains("high-input load limit            : 4.80 mA"));
+    assert!(stdout.contains("low input stays in cutoff        : yes"));
+    assert!(stdout.contains("high input reaches saturation    : yes"));
+    assert!(stdout.contains("on-state current is load-limited : yes"));
 }
 
 #[test]
