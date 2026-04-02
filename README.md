@@ -67,8 +67,6 @@ That means the `Check` section is meant to resist self-certification. The best c
 
 A computational check of the Collatz conjecture in [`src/collatz_1000.rs`](src/collatz_1000.rs).
 
-For CLI compatibility, the case name remains `collatz-1000`, while this version exhaustively verifies all starts from `1` through `10000`.
-
 It models:
 
 - the standard Collatz step `n -> n / 2` for even `n`

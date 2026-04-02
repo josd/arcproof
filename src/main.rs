@@ -484,7 +484,7 @@ fn snapshot_root(root: &Path) -> PathBuf {
 }
 
 fn temp_snapshot_root(root: &Path) -> PathBuf {
-    root.join("target").join("arcproof-pilot")
+    root.join("target").join("tmp")
 }
 
 fn expected_snapshot_paths(root: &Path) -> Vec<PathBuf> {
