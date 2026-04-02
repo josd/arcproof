@@ -183,6 +183,18 @@ It models:
 - verification of the standard `<= 7` iteration bound
 - readable witness traces, including the leading-zero case `2111 -> 0999 -> ... -> 6174`
 
+### `matrix-mechanics`
+
+A toy matrix-mechanics example inspired by Werner Heisenberg's matrix formulation in [`src/matrix_mechanics.rs`](src/matrix_mechanics.rs).
+
+It models:
+
+- observables as exact 2x2 matrices
+- a Hamiltonian with two discrete energy levels
+- a second observable that swaps the energy basis states
+- explicit computation of `HX`, `XH`, and the commutator `[H, X]`
+- checks that the spectrum is correct and that matrix order matters
+
 ### `polynomial`
 
 A quartic polynomial consistency check in [`src/polynomial.rs`](src/polynomial.rs).
@@ -260,6 +272,7 @@ cargo run --release -- fibonacci
 cargo run --release -- goldbach-1000
 cargo run --release -- gps
 cargo run --release -- kaprekar-6174
+cargo run --release -- matrix-mechanics
 cargo run --release -- path-discovery
 cargo run --release -- polynomial
 cargo run --release -- sudoku

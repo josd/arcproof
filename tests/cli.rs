@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 use std::process::Command;
 
 fn run_args(args: &[&str]) -> std::process::Output {
@@ -92,6 +93,7 @@ fn list_shows_all_available_cases() {
     assert!(stdout.contains("goldbach-1000"));
     assert!(stdout.contains("gps"));
     assert!(stdout.contains("kaprekar-6174"));
+    assert!(stdout.contains("matrix-mechanics"));
     assert!(stdout.contains("path-discovery"));
     assert!(stdout.contains("polynomial"));
     assert!(stdout.contains("sudoku"));
@@ -176,6 +178,23 @@ fn kaprekar_6174_cli_reports_the_exhaustive_proof_summary() {
     assert!(stdout.contains("worst-case starts   : 2184"));
     assert!(stdout.contains("worst-case trace    : 0014 -> 4086 -> 8172 -> 7443 -> 3996 -> 6264 -> 4176 -> 6174"));
     assert!(stdout.contains("leading-zero trace  : 2111 -> 0999 -> 8991 -> 8082 -> 8532 -> 6174"));
+}
+
+#[test]
+fn matrix_mechanics_cli_reports_noncommuting_observables() {
+    let output = run_case("matrix-mechanics");
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    assert!(stdout.contains("case                : matrix-mechanics"));
+    assert!(stdout.contains("energy levels       : 1, 2"));
+    assert!(stdout.contains("H                   : [[1, 0], [0, 2]]"));
+    assert!(stdout.contains("X                   : [[0, 1], [1, 0]]"));
+    assert!(stdout.contains("[H, X]              : [[0, -1], [1, 0]]"));
+    assert!(stdout.contains("trace matches levels        : yes"));
+    assert!(stdout.contains("determinant matches levels  : yes"));
+    assert!(stdout.contains("X^2 = I                     : yes"));
+    assert!(stdout.contains("[H, X] != 0                : yes"));
 }
 
 #[test]
@@ -306,16 +325,40 @@ fn sudoku_cli_reports_the_default_puzzle_solution() {
 }
 
 #[test]
-fn json_output_for_all_cases_is_an_array_of_twelve_reports() {
-    let output = run_args(&["--all", "--format", "json"]);
-    assert!(output.status.success());
+fn json_output_for_all_cases_matches_the_list_command_without_assuming_order() {
+    let all_output = run_args(&["--all", "--format", "json"]);
+    assert!(all_output.status.success());
 
-    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
-    let value: serde_json::Value = serde_json::from_str(&stdout).expect("valid json output");
+    let all_stdout = String::from_utf8(all_output.stdout).expect("stdout should be valid utf-8");
+    let value: serde_json::Value = serde_json::from_str(&all_stdout).expect("valid json output");
 
     let reports = value.as_array().expect("top-level json array");
-    assert_eq!(reports.len(), 12);
-    assert_eq!(reports[0]["case"], "collatz-1000");
-    assert_eq!(reports[10]["case"], "polynomial");
-    assert_eq!(reports[11]["case"], "sudoku");
+    assert!(!reports.is_empty(), "--all should emit at least one report");
+
+    let listed_output = run_case("--list");
+    assert!(listed_output.status.success());
+    let listed_stdout = String::from_utf8(listed_output.stdout).expect("stdout should be valid utf-8");
+    let listed_cases: BTreeSet<&str> = listed_stdout
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .collect();
+
+    let report_cases: BTreeSet<&str> = reports
+        .iter()
+        .map(|report| {
+            assert!(report["answer"].is_array());
+            assert!(report["reason_why"].is_array());
+            assert!(report["check"].is_array());
+            report["case"]
+                .as_str()
+                .expect("every report should have a string case name")
+        })
+        .collect();
+
+    assert_eq!(report_cases, listed_cases);
+    assert!(report_cases.contains("collatz-1000"));
+    assert!(report_cases.contains("matrix-mechanics"));
+    assert!(report_cases.contains("polynomial"));
+    assert!(report_cases.contains("sudoku"));
 }

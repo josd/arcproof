@@ -1,0 +1,107 @@
+{
+  "case": "matrix-mechanics",
+  "answer": [
+    {
+      "kind": "text",
+      "text": "In this toy matrix-mechanics model, the Hamiltonian has two discrete energy levels and does not commute with a second observable."
+    },
+    {
+      "kind": "field",
+      "label": "case",
+      "value": "matrix-mechanics"
+    },
+    {
+      "kind": "field",
+      "label": "energy levels",
+      "value": "1, 2"
+    },
+    {
+      "kind": "field",
+      "label": "commutator nonzero",
+      "value": "yes"
+    }
+  ],
+  "reason_why": [
+    {
+      "kind": "text",
+      "text": "We represent observables as exact 2x2 matrices, multiply them in both orders, and compare the products. The Hamiltonian is diagonal in the chosen basis, while X swaps the two basis states."
+    },
+    {
+      "kind": "field",
+      "label": "H",
+      "value": "[[1, 0], [0, 2]]"
+    },
+    {
+      "kind": "field",
+      "label": "X",
+      "value": "[[0, 1], [1, 0]]"
+    },
+    {
+      "kind": "field",
+      "label": "HX",
+      "value": "[[0, 1], [2, 0]]"
+    },
+    {
+      "kind": "field",
+      "label": "XH",
+      "value": "[[0, 2], [1, 0]]"
+    },
+    {
+      "kind": "field",
+      "label": "[H, X]",
+      "value": "[[0, -1], [1, 0]]"
+    },
+    {
+      "kind": "field",
+      "label": "H e1",
+      "value": "[1, 0]"
+    },
+    {
+      "kind": "field",
+      "label": "H e2",
+      "value": "[0, 2]"
+    },
+    {
+      "kind": "field",
+      "label": "X e1",
+      "value": "[0, 1]"
+    },
+    {
+      "kind": "field",
+      "label": "X e2",
+      "value": "[1, 0]"
+    }
+  ],
+  "check": [
+    {
+      "kind": "field",
+      "label": "trace matches levels",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "determinant matches levels",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "e1 eigenvector check",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "e2 eigenvector check",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "X^2 = I",
+      "value": "yes"
+    },
+    {
+      "kind": "field",
+      "label": "[H, X] != 0",
+      "value": "yes"
+    }
+  ]
+}

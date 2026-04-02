@@ -7,6 +7,7 @@ fibonacci
 goldbach-1000
 gps
 kaprekar-6174
+matrix-mechanics
 path-discovery
 polynomial
 sudoku
