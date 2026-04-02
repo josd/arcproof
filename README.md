@@ -24,6 +24,16 @@ These examples are organized around a few simple ARC principles:
 
 In this repository, the programs are generated with GPT and iteratively refined under human guidance. They are specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. Rather than using a generic logical reasoner, arcproof uses generated, task-specific Rust cases that follow an Answer–Reason–Check discipline. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
 
+## Relation to Ershov's mixed computation
+
+There is a useful family resemblance between the ARC style used here and Andrei Ershov's idea of **mixed computation**. In Ershov's formulation, a computation can be split into a part that is carried out now, using the information already available, and a **residual program** that is left to run later on the still-unknown part of the input. In modern terms, that is closely related to partial evaluation and program specialization.
+
+Arcproof is not a classical mixed-computation system, but it often follows a similar engineering instinct. Instead of shipping a large generic reasoner, it generates a smaller task-specific Rust artifact that has already absorbed much of the problem structure: the rules, the data layout, the query shape, and the expected checks. What remains is a compact executable that can run fast, expose its reasoning in a local form, and validate its own output.
+
+The main difference is emphasis. Classic mixed computation is usually introduced as a way to specialize programs and obtain efficient residual code. ARC adds a stronger interface discipline around that specialized artifact: the program should not only compute the answer, but also present a short reason and perform explicit checks that can fail loudly. In that sense, arcproof can be read as borrowing part of the spirit of mixed computation while redirecting it toward auditable, benchmarkable, student-readable proof artifacts.
+
+For readers who want the historical connection, see Andrei P. Ershov, *Mixed computation: Potential applications and problems for study* (1982), and the later literature on partial evaluation and mixed computation.
+
 ## Why this style is useful
 
 That structure has practical benefits:
