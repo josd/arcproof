@@ -1,6 +1,6 @@
 # Snapshots
 
-This directory holds the checked-in expected output for arcproof.
+This directory holds the checked-in expected output for arcmix.
 
 Generate or refresh it with:
 

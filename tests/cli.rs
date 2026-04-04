@@ -2,10 +2,10 @@ use std::collections::BTreeSet;
 use std::process::Command;
 
 fn run_args(args: &[&str]) -> std::process::Output {
-    Command::new(env!("CARGO_BIN_EXE_arcproof"))
+    Command::new(env!("CARGO_BIN_EXE_arcmix"))
         .args(args)
         .output()
-        .expect("failed to run arcproof binary")
+        .expect("failed to run arcmix binary")
 }
 
 fn run_case(arg: &str) -> std::process::Output {
@@ -335,9 +335,9 @@ fn show_command_accepts_json_mode() {
 
 #[test]
 fn bare_invocation_runs_the_same_cases_as_all() {
-    let bare = Command::new(env!("CARGO_BIN_EXE_arcproof"))
+    let bare = Command::new(env!("CARGO_BIN_EXE_arcmix"))
         .output()
-        .expect("failed to run bare arcproof binary");
+        .expect("failed to run bare arcmix binary");
     assert!(bare.status.success());
 
     let all = run_case("--all");

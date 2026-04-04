@@ -129,11 +129,11 @@ fn other_error(message: impl Into<String>) -> io::Error {
 
 fn usage() -> &'static str {
     r#"Usage:
-  arcproof [CASE | --all | --list] [--format text|json]
-  arcproof show CASE [text|json]
-  arcproof refresh
-  arcproof check
-  arcproof help
+  arcmix [CASE | --all | --list] [--format text|json]
+  arcmix show CASE [text|json]
+  arcmix refresh
+  arcmix check
+  arcmix help
 
 Case commands:
   --list, list     List the available cases.
