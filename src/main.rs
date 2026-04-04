@@ -16,6 +16,7 @@ mod goldbach_1000;
 mod gps;
 mod kaprekar_6174;
 mod matrix_mechanics;
+mod odrl_dpv_ehds_risk_ranked;
 mod path_discovery;
 mod pn_junction_tunneling;
 mod polynomial;
@@ -25,7 +26,7 @@ mod sudoku;
 
 use report::CaseReport;
 
-const CASE_NAMES: [&str; 15] = [
+const CASE_NAMES: [&str; 16] = [
     "collatz-1000",
     "control-system",
     "deep-taxonomy-100000",
@@ -36,6 +37,7 @@ const CASE_NAMES: [&str; 15] = [
     "gps",
     "kaprekar-6174",
     "matrix-mechanics",
+    "odrl-dpv-ehds-risk-ranked",
     "path-discovery",
     "pn-junction-tunneling",
     "polynomial",
@@ -61,6 +63,7 @@ enum CaseName {
     Gps,
     Kaprekar6174,
     MatrixMechanics,
+    OdrlDpvEhdsRiskRanked,
     PathDiscovery,
     PnJunctionTunneling,
     Polynomial,
@@ -81,6 +84,7 @@ impl CaseName {
             CaseName::Gps => "gps",
             CaseName::Kaprekar6174 => "kaprekar-6174",
             CaseName::MatrixMechanics => "matrix-mechanics",
+            CaseName::OdrlDpvEhdsRiskRanked => "odrl-dpv-ehds-risk-ranked",
             CaseName::PathDiscovery => "path-discovery",
             CaseName::PnJunctionTunneling => "pn-junction-tunneling",
             CaseName::Polynomial => "polynomial",
@@ -178,6 +182,7 @@ fn parse_case_name(raw: &str) -> io::Result<CaseName> {
         "gps" => Ok(CaseName::Gps),
         "kaprekar-6174" | "kaprekar_6174" => Ok(CaseName::Kaprekar6174),
         "matrix-mechanics" | "matrix_mechanics" | "matrix" => Ok(CaseName::MatrixMechanics),
+        "odrl-dpv-ehds-risk-ranked" | "odrl_dpv_ehds_risk_ranked" | "ehds-risk-ranked" | "ehds_risk_ranked" => Ok(CaseName::OdrlDpvEhdsRiskRanked),
         "path-discovery" | "path_discovery" => Ok(CaseName::PathDiscovery),
         "pn-junction-tunneling" | "pn_junction_tunneling" | "pn-junction" | "pn_junction" | "tunnel-diode" => Ok(CaseName::PnJunctionTunneling),
         "polynomial" => Ok(CaseName::Polynomial),
@@ -330,6 +335,7 @@ fn case_report(case_name: CaseName) -> io::Result<CaseReport> {
         CaseName::Gps => gps::report(),
         CaseName::Kaprekar6174 => kaprekar_6174::report(),
         CaseName::MatrixMechanics => matrix_mechanics::report(),
+        CaseName::OdrlDpvEhdsRiskRanked => odrl_dpv_ehds_risk_ranked::report(),
         CaseName::PathDiscovery => path_discovery::report(),
         CaseName::PnJunctionTunneling => pn_junction_tunneling::report(),
         CaseName::Polynomial => polynomial::report(),
@@ -393,6 +399,7 @@ fn run_case_text(case_name: CaseName) -> io::Result<()> {
         CaseName::Gps => gps::run_and_print(),
         CaseName::Kaprekar6174 => kaprekar_6174::run_and_print(),
         CaseName::MatrixMechanics => matrix_mechanics::run_and_print(),
+        CaseName::OdrlDpvEhdsRiskRanked => odrl_dpv_ehds_risk_ranked::run_and_print(),
         CaseName::PathDiscovery => path_discovery::run_and_print(),
         CaseName::PnJunctionTunneling => pn_junction_tunneling::run_and_print(),
         CaseName::Polynomial => polynomial::run_and_print(),
@@ -401,7 +408,7 @@ fn run_case_text(case_name: CaseName) -> io::Result<()> {
     }
 }
 
-fn all_case_names() -> [CaseName; 15] {
+fn all_case_names() -> [CaseName; 16] {
     [
         CaseName::Collatz1000,
         CaseName::ControlSystem,
@@ -413,6 +420,7 @@ fn all_case_names() -> [CaseName; 15] {
         CaseName::Gps,
         CaseName::Kaprekar6174,
         CaseName::MatrixMechanics,
+        CaseName::OdrlDpvEhdsRiskRanked,
         CaseName::PathDiscovery,
         CaseName::PnJunctionTunneling,
         CaseName::Polynomial,
@@ -424,7 +432,7 @@ fn all_case_names() -> [CaseName; 15] {
 fn run_all_cases(format: OutputFormat) -> io::Result<()> {
     match format {
         OutputFormat::Text => {
-            let runners: [(CaseName, fn() -> io::Result<()>); 15] = [
+            let runners: [(CaseName, fn() -> io::Result<()>); 16] = [
                 (CaseName::Collatz1000, collatz_1000::run_and_print),
                 (CaseName::ControlSystem, control_system::run_and_print),
                 (CaseName::DeepTaxonomy100000, deep_taxonomy_100000::run_and_print),
@@ -435,6 +443,7 @@ fn run_all_cases(format: OutputFormat) -> io::Result<()> {
                 (CaseName::Gps, gps::run_and_print),
                 (CaseName::Kaprekar6174, kaprekar_6174::run_and_print),
                 (CaseName::MatrixMechanics, matrix_mechanics::run_and_print),
+                (CaseName::OdrlDpvEhdsRiskRanked, odrl_dpv_ehds_risk_ranked::run_and_print),
                 (CaseName::PathDiscovery, path_discovery::run_and_print),
                 (CaseName::PnJunctionTunneling, pn_junction_tunneling::run_and_print),
                 (CaseName::Polynomial, polynomial::run_and_print),

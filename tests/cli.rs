@@ -107,6 +107,7 @@ fn list_shows_all_available_cases() {
     assert!(stdout.contains("gps"));
     assert!(stdout.contains("kaprekar-6174"));
     assert!(stdout.contains("matrix-mechanics"));
+    assert!(stdout.contains("odrl-dpv-ehds-risk-ranked"));
     assert!(stdout.contains("path-discovery"));
     assert!(stdout.contains("pn-junction-tunneling"));
     assert!(stdout.contains("polynomial"));
@@ -210,6 +211,25 @@ fn matrix_mechanics_cli_reports_noncommuting_observables() {
     assert!(stdout.contains("determinant matches levels  : yes"));
     assert!(stdout.contains("X^2 = I                     : yes"));
     assert!(stdout.contains("[H, X] != 0                : yes"));
+}
+
+#[test]
+fn odrl_dpv_ehds_risk_ranked_cli_reports_ranked_findings() {
+    let output = run_case("odrl-dpv-ehds-risk-ranked");
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be valid utf-8");
+    assert!(stdout.contains("case                 : odrl-dpv-ehds-risk-ranked"));
+    assert!(stdout.contains("ranked risks         : 4"));
+    assert!(stdout.contains("top pair             : H1=100, H2=100"));
+    assert!(stdout.contains("Risk #1"));
+    assert!(stdout.contains(" clause              : H1"));
+    assert!(stdout.contains(" score               : 100"));
+    assert!(stdout.contains("Risk #3"));
+    assert!(stdout.contains(" clause              : H3"));
+    assert!(stdout.contains(" score               : 88"));
+    assert!(stdout.contains("all expected clauses flagged : yes"));
+    assert!(stdout.contains("independent top pair check: yes"));
 }
 
 #[test]

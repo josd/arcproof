@@ -229,6 +229,19 @@ It models the two quartic outputs shown in the original example material and ver
 - direct zero-evaluation of each root against its source polynomial
 - that every reported example is internally consistent
 
+### `odrl-dpv-ehds-risk-ranked`
+
+An ODRL + DPV + EHDS risk-ranking example in [`src/odrl_dpv_ehds_risk_ranked.rs`](src/odrl_dpv_ehds_risk_ranked.rs).
+
+It models:
+
+- an EHDS secondary-use agreement as specialized Rust data rather than a generic RDF engine
+- four patient-rights expectations as weighted needs
+- four agreement clauses and their corresponding ODRL permissions
+- missing safeguards for data permits, opt-out respect, secure processing, and statistical anonymisation
+- score calculation as `base risk + need importance`, capped at 100
+- ranked findings with explicit mitigations and independent checks on score recomputation and ordering
+
 ### `path-discovery`
 
 A path-finding example in [`src/path_discovery.rs`](src/path_discovery.rs).
@@ -269,6 +282,7 @@ It models:
 - [`src/gps.rs`](src/gps.rs) — GPS benchmark translation
 - [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs) — Kaprekar 6174 proof example
 - [`src/matrix_mechanics.rs`](src/matrix_mechanics.rs) — matrix mechanics toy example
+- [`src/odrl_dpv_ehds_risk_ranked.rs`](src/odrl_dpv_ehds_risk_ranked.rs) — ODRL/DPV/EHDS risk-ranking case
 - [`src/path_discovery.rs`](src/path_discovery.rs) — path discovery benchmark translation plus generated airport and flight data
 - [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs) — PN-junction tunneling toy example
 - [`src/polynomial.rs`](src/polynomial.rs) — polynomial benchmark translation
