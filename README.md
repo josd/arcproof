@@ -88,35 +88,33 @@ Run the project check:
 make check
 ```
 
-`make check` launches every built example and prints:
+`make check` launches every built example once and prints a compact line for each one:
 
-- `status`
-- one stable timing value in milliseconds
+- example name
+- one wall-clock timing value in milliseconds
+- `OK`, `FAIL`, or `MISSING`
 
-### Meaning of `status`
+### Meaning of the check output
 
-- `OK` — the example ran successfully on all warmup and timed runs
-- `FAIL` — at least one run failed or could not be started
+- `OK` — the example exited with code `0`
+- `FAIL` — the example ran but returned a non-zero exit code
 - `MISSING` — the executable was not built
 
-### Meaning of `time (ms)`
-
-The reported time is a stable wall-clock estimate in milliseconds for the whole
-standalone executable.
-It includes process startup and ordinary scheduling effects, so it should be
-read as a practical runtime number, not as a microbenchmark of only the inner
-algorithm.
+The reported time is a single wall-clock run of the whole standalone executable,
+in milliseconds. It includes process startup and normal scheduling effects, so
+it is best read as a practical runtime number rather than a microbenchmark of
+only the inner algorithm.
 
 The timing helper is:
 
 ```sh
-python3 tools/check_with_timing.py
+bash tools/check_with_timing.sh
 ```
 
 To let each program print its normal output during timing:
 
 ```sh
-python3 tools/check_with_timing.py --verbose
+bash tools/check_with_timing.sh --verbose
 ```
 
 ## Dependencies
@@ -131,7 +129,7 @@ Two examples currently use extra libraries:
 Typical Debian/Ubuntu packages:
 
 ```sh
-sudo apt-get install build-essential libgmp-dev libssl-dev python3
+sudo apt-get install build-essential libgmp-dev libssl-dev
 ```
 
 ## Repository layout
@@ -139,7 +137,7 @@ sudo apt-get install build-essential libgmp-dev libssl-dev python3
 ```text
 examples/   standalone C example programs
 bin/        compiled executables produced by `make`
-tools/      helper tools, including the timing checker
+tools/      helper scripts, including the timing checker
 Makefile    build and check entry point
 README.md   project overview
 ```

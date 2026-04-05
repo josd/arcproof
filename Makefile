@@ -16,7 +16,7 @@ bin:
 	mkdir -p bin
 
 check: $(BINARIES)
-	@python3 tools/check_with_timing.py
+	@bash tools/check_with_timing.sh
 
 clean:
 	rm -rf bin
