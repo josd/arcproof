@@ -1,416 +1,165 @@
-# arc
+# ARC
 
-Arc is a collection of generated Rust cases built around ARC — Answer, Reason, Check — producing answers, explaining them, and verifying them with explicit checks.
+ARC is a collection of small, self-contained C programs.
+Each program answers one precise question, explains the result briefly, and
+then checks that result with explicit validations.
 
-An ARC program does three things:
+That is the core ARC idea:
 
-- **Answer** — produces the result
-- **Reason** — provides a short witness, derivation, or explanation showing why the result follows
-- **Check** — runs one or more explicit validations that fail loudly if an assumption is wrong, an edge case is missed, or the answer disagrees with an independent test
+- **Answer** — compute the result
+- **Reason** — show a short witness, derivation, or explanation
+- **Check** — run explicit tests that can fail loudly if the result is wrong
 
-A useful way to read this repository is as **teaching material for an LLM acting as a student programmer**. The target is not a mysterious giant system that emits polished text. The target is a small program that can be written, inspected, rerun, criticized, and improved. In that teaching setup, the student should learn to produce code that answers a precise question, explains its reasoning in a compact witness, and then verifies the result with explicit checks instead of asking for trust.
+The point is not only to compute something, but to compute it in a way that is
+**easy to inspect, rerun, and verify**.
 
-That teaching angle matters because it pushes toward the right habits: keep the data explicit, keep the logic local, keep the question precise, and make correctness visible in the running artifact. The goal is not just to compute, but to compute in a way that stays easy to inspect, explain, and challenge. That is the practical value of the ARC approach: each run leaves an auditable trail instead of a black box. This follows the core ARC idea that trustworthy computation should be self-contained, repeatable, and verifiable at runtime.
+## What this project contains
 
-## ARC principles used here
+The `examples/` directory contains 16 standalone C programs:
 
-These examples are organized around a few simple ARC principles:
+- `collatz_1000.c`
+- `control_system.c`
+- `deep_taxonomy_100000.c`
+- `delfour.c`
+- `euler_identity.c`
+- `fibonacci.c`
+- `goldbach_1000.c`
+- `gps.c`
+- `kaprekar_6174.c`
+- `matrix_mechanics.c`
+- `odrl_dpv_ehds_risk_ranked.c`
+- `path_discovery.c`
+- `pn_junction_tunneling.c`
+- `polynomial.c`
+- `transistor_switch.c`
+- `sudoku.c`
 
-- **Data + Logic + Question** — each case starts from explicit input data, explicit rules or algorithms, and a precise question to answer
-- **P3: Prompt → Program → Proof** — in the broader ARC workflow, the important deliverable is not only an answer but a portable program whose output can be checked again and again
-- **Proof = Reason Why + Check** — the explanation and the executable validation work together; either one alone is weaker than both together
-- **Runtime verification is mandatory** — every case should validate key invariants during execution rather than relying on trust in the code or in the author
-- **Portable artifacts beat opaque sessions** — a small standalone program is easier to benchmark, automate, audit, archive, and compare across implementations
+Each file is meant to stand on its own:
 
-In this repository, the programs are generated with GPT and iteratively refined under human guidance. They are specialized for speed, but they still follow the same ARC discipline: answer the question, explain the answer, and verify the answer. Rather than using a generic logical reasoner, arc uses generated, task-specific Rust cases that follow an Answer–Reason–Check discipline. That also makes them good exemplars for teaching or evaluating an LLM as a student programmer: the deliverable is not merely source code, but a runnable artifact whose reasoning and checks are visible at the interface.
+- it has its own `main()`
+- it keeps its own data and logic
+- it can be compiled and run directly
 
-## Relation to Ershov's mixed computation
+## Why ARC is useful
 
-There is a useful family resemblance between the ARC style used here and Andrei Ershov's idea of **mixed computation**. In Ershov's formulation, a computation can be split into a part that is carried out now, using the information already available, and a **residual program** that is left to run later on the still-unknown part of the input. In modern terms, that is closely related to partial evaluation and program specialization.
+This style keeps the important parts visible:
 
-Arc is not a classical mixed-computation system, but it often follows a similar engineering instinct. Instead of shipping a large generic reasoner, it generates a smaller task-specific Rust artifact that has already absorbed much of the problem structure: the rules, the data layout, the query shape, and the expected checks. What remains is a compact executable that can run fast, expose its reasoning in a local form, and validate its own output.
+- the **data** is explicit
+- the **logic** is local to the example
+- the **question** is precise
+- the **checks** are part of the running artifact
 
-The main difference is emphasis. Classic mixed computation is usually introduced as a way to specialize programs and obtain efficient residual code. ARC adds a stronger interface discipline around that specialized artifact: the program should not only compute the answer, but also present a short reason and perform explicit checks that can fail loudly. In that sense, arc can be read as borrowing part of the spirit of mixed computation while redirecting it toward auditable, benchmarkable, student-readable proof artifacts.
+That makes the programs easier to audit, benchmark, teach from, and compare.
+A good ARC check is not decorative: it should be a concrete test that can fail.
 
-For readers who want the historical connection, see Andrei P. Ershov, *Mixed computation: Potential applications and problems for study* (1982), and the later literature on partial evaluation and mixed computation.
+## Build
 
-## Why this style is useful
+Build all examples:
 
-That structure has practical benefits:
+```sh
+make
+```
 
-- it makes each run easier to audit
-- it keeps examples readable instead of opaque
-- it teaches a student programmer, human or LLM, to separate result, explanation, and verification
-- it encourages independent cross-checks rather than self-certification
-- it makes benchmark cases useful as demonstrations, not just speed tests
-- it gives each example a stable textual interface that is easy to compare across implementations
-- it makes the output easier to reuse in automation, compliance-style review, and reproducible experiments
+This creates executables in `bin/`.
 
-## What counts as a good Check
+Build one example manually:
 
-A good ARC check is not a decorative success message. It should be a concrete test that can actually fail.
-
-In this repository, good checks try to have one or more of these properties:
-
-- they recompute a quantity from a different angle
-- they validate a witness example separately from the summary statistic
-- they test algebraic identities, conservation laws, or structural invariants
-- they verify boundary cases and representative hard cases
-- they stop the program with a clear error when the contract is broken
-
-That means the `Check` section is meant to resist self-certification. The best cases do not merely restate the main computation path; they challenge it.
-
-## Included cases
-
-
-### `collatz-1000`
-
-A computational check of the Collatz conjecture in [`src/collatz_1000.rs`](src/collatz_1000.rs).
-
-It models:
-
-- the standard Collatz step `n -> n / 2` for even `n`
-- the standard Collatz step `n -> 3n + 1` for odd `n`
-- exhaustive verification over all starts from `1` through `10000`
-- the longest stopping time within that range
-- the highest peak value reached within that range
-- a classic witness trace summary for `27`
-
-### `control-system`
-
-A small rule-based control example in [`src/control_system.rs`](src/control_system.rs).
-
-It models:
-
-- the source measurements, observations, and targets as typed Rust enums
-- the derived helper rule `measurement10/2`
-- the two `control1/2` rules for `actuator1` and `actuator2`
-- the final existential query `true :+ control1(_, _)` as `query satisfied`
-
-### `deep-taxonomy-100000`
-
-A specialized forward-chaining taxonomy benchmark in [`src/deep_taxonomy_100000.rs`](src/deep_taxonomy_100000.rs).
-
-It models:
-
-- one seed fact: `Ind has class N(0)`
-- 100,000 chain rules: `N(i) -> N(i+1), I(i+1), J(i+1)`
-- one final class rule: `N(100000) -> A2`
-- one goal rule: `A2 -> goal reached`
-
-This version is specialized for speed and does not use a slower generic triple engine.
-
-### `delfour`
-
-A Rust translation of Ruben Verborgh's Delfour Insight Economy phone/scanner demo in [`src/delfour.rs`](src/delfour.rs).
-
-It models:
-
-- desensitizing a household condition into a neutral low-sugar need
-- deriving a scoped, expiring insight envelope for shopping assistance
-- signing that envelope with HMAC-SHA256 over canonical JSON
-- authorizing scanner use under a purpose-limited ODRL-style policy
-- suggesting a lower-sugar alternative for the scanned product
-- verifying minimization, authorization, and duty-timing checks
-
-### `euler-identity`
-
-An exact arithmetic version of Euler's identity in [`src/euler_identity.rs`](src/euler_identity.rs).
-
-This version uses direct integer arithmetic over a small `ExactComplex` type.
-
-It mirrors the mathematical structure:
-
-- construct `exp(i*pi)` exactly as `(-1, 0)`
-- add `(1, 0)` to obtain `(0, 0)`
-- verify the phase modulus squared is `1`
-- certify that the identity holds exactly
-
-### `fibonacci`
-
-A direct Fibonacci computation in [`src/fibonacci.rs`](src/fibonacci.rs).
-
-This version computes the requested values with iterative Rust and `BigUint`.
-
-It prints:
-
-- `F(0)`
-- `F(1)`
-- `F(10)`
-- `F(100)`
-- `F(1000)`
-
-### `goldbach-1000`
-
-A computational check of Goldbach's conjecture in [`src/goldbach_1000.rs`](src/goldbach_1000.rs).
-
-It models:
-
-- prime generation up to `1000` with a sieve
-- exhaustive verification for every even target from `4` through `1000`
-- enumeration of unordered prime-pair decompositions `n = p + q`
-- the hardest targets with the fewest decompositions
-- the richest target with the most decompositions
-- a balanced witness pair for `1000`
-
-### `gps`
-
-A route-planning example in [`src/gps.rs`](src/gps.rs).
-
-It models:
-
-- four route descriptions
-- recursive path chaining
-- duration and cost summation
-- belief and comfort multiplication
-- route filtering against goal constraints
-- human-readable route output
-
-The translation uses Rust concepts like `City`, `Action`, `Stage`, `Description`, and `Route`.
-
-### `kaprekar-6174`
-
-A computational proof of Kaprekar's constant in [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs).
-
-It models:
-
-- the four-digit Kaprekar routine with leading zeros preserved
-- the exclusion of repdigits such as `1111` and `0000`
-- exhaustive verification over all remaining four-digit starts
-- proof that every valid start reaches `6174`
-- verification of the standard `<= 7` iteration bound
-- readable witness traces, including the leading-zero case `2111 -> 0999 -> ... -> 6174`
-
-### `matrix-mechanics`
-
-A toy matrix-mechanics example inspired by Werner Heisenberg's matrix formulation in [`src/matrix_mechanics.rs`](src/matrix_mechanics.rs).
-
-It models:
-
-- observables as exact 2x2 matrices
-- a Hamiltonian with two discrete energy levels
-- a second observable that swaps the energy basis states
-- explicit computation of `HX`, `XH`, and the commutator `[H, X]`
-- checks that the spectrum is correct and that matrix order matters
-
-### `pn-junction-tunneling`
-
-A toy PN-junction tunneling example inspired by tunnel-diode / Esaki-diode behavior in [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs).
-
-It models:
-
-- an ordinary junction and a heavily doped junction with different depletion widths
-- filled N-side states and empty P-side states as small exact integer energy sets
-- a forward-bias shift that changes the overlap window for tunneling
-- a current proxy computed as the exact overlap count at each bias step
-- checks that the overlap rises to a peak and then falls, illustrating a negative-differential region
-
-### `transistor-switch`
-
-A toy transistor-switch example inspired by a BJT used as an ON/OFF switch in [`src/transistor_switch.rs`](src/transistor_switch.rs).
-
-It models:
-
-- an NPN transistor as a low-side switch rather than as a linear amplifier
-- exact millivolt and microamp arithmetic for the base and collector paths
-- cutoff for a low control input and saturation for a high control input
-- collector current as the smaller of the gain-limited and load-limited currents
-- checks that the OFF state carries no load current and the ON state is load-limited in saturation
-
-### `polynomial`
-
-A quartic polynomial consistency check in [`src/polynomial.rs`](src/polynomial.rs).
-
-It models the two quartic outputs shown in the original example material and verifies:
-
-- the exact source coefficients for each reported polynomial
-- the exact roots for the real and complex quartics
-- polynomial reconstruction from those roots
-- direct zero-evaluation of each root against its source polynomial
-- that every reported example is internally consistent
-
-### `odrl-dpv-ehds-risk-ranked`
-
-An ODRL + DPV + EHDS risk-ranking example in [`src/odrl_dpv_ehds_risk_ranked.rs`](src/odrl_dpv_ehds_risk_ranked.rs).
-
-It models:
-
-- an EHDS secondary-use agreement as specialized Rust data rather than a generic RDF engine
-- four patient-rights expectations as weighted needs
-- four agreement clauses and their corresponding ODRL permissions
-- missing safeguards for data permits, opt-out respect, secure processing, and statistical anonymisation
-- score calculation as `base risk + need importance`, capped at 100
-- ranked findings with explicit mitigations and independent checks on score recomputation and ordering
-
-### `path-discovery`
-
-A path-finding example in [`src/path_discovery.rs`](src/path_discovery.rs).
-
-It models:
-
-- the full airport graph from the source data
-- airport labels as Rust lookup data
-- direct flights as `(from, to)` edges
-- adjacency-map construction for traversal
-- depth-limited DFS over simple paths
-- a query for all routes from Ostend-Bruges International Airport to Václav Havel Airport Prague with at most 2 stopovers
-
-### `sudoku`
-
-A generic Sudoku solver in [`src/sudoku.rs`](src/sudoku.rs).
-
-It models:
-
-- a standard 9×9 Sudoku grid as 81 cells
-- row, column, and box legality with bitmask tracking
-- repeated naked-single propagation
-- minimum-remaining-values branching with backtracking
-- a default puzzle and its completed grid
-- independent checks for clue preservation, unit validity, legality replay, and uniqueness
-
-## Files
-
-- [`src/main.rs`](src/main.rs) — CLI dispatcher
-- [`src/report.rs`](src/report.rs) — structured ARC report model used for JSON output
-- [`src/collatz_1000.rs`](src/collatz_1000.rs) — Collatz conjecture benchmark translation
-- [`src/control_system.rs`](src/control_system.rs) — control system benchmark translation
-- [`src/deep_taxonomy_100000.rs`](src/deep_taxonomy_100000.rs) — specialized taxonomy benchmark
-- [`src/delfour.rs`](src/delfour.rs) — Delfour phone/scanner insight example
-- [`src/euler_identity.rs`](src/euler_identity.rs) — Euler identity benchmark translation
-- [`src/fibonacci.rs`](src/fibonacci.rs) — Fibonacci benchmark translation
-- [`src/goldbach_1000.rs`](src/goldbach_1000.rs) — Goldbach conjecture benchmark translation
-- [`src/gps.rs`](src/gps.rs) — GPS benchmark translation
-- [`src/kaprekar_6174.rs`](src/kaprekar_6174.rs) — Kaprekar 6174 proof example
-- [`src/matrix_mechanics.rs`](src/matrix_mechanics.rs) — matrix mechanics toy example
-- [`src/odrl_dpv_ehds_risk_ranked.rs`](src/odrl_dpv_ehds_risk_ranked.rs) — ODRL/DPV/EHDS risk-ranking case
-- [`src/path_discovery.rs`](src/path_discovery.rs) — path discovery benchmark translation plus generated airport and flight data
-- [`src/pn_junction_tunneling.rs`](src/pn_junction_tunneling.rs) — PN-junction tunneling toy example
-- [`src/polynomial.rs`](src/polynomial.rs) — polynomial benchmark translation
-- [`src/transistor_switch.rs`](src/transistor_switch.rs) — transistor as on/off switch toy example
-- [`src/sudoku.rs`](src/sudoku.rs) — generic Sudoku solver
+```sh
+cc -O2 -std=c11 -Wall -Wextra -pedantic examples/sudoku.c -o bin/sudoku -lm -lcrypto -lgmp
+```
 
 ## Run
 
-The package name is `arc`, so a release build produces `target/release/arc`.
+Run any example directly:
 
-Default case:
-
-```bash
-cargo run --release
+```sh
+./bin/sudoku
+./bin/gps
+./bin/path_discovery
 ```
 
-Explicit cases:
+Each program prints a human-readable ARC report.
 
-```bash
-cargo run --release -- collatz-1000
-cargo run --release -- control-system
-cargo run --release -- deep-taxonomy-100000
-cargo run --release -- delfour
-cargo run --release -- euler-identity
-cargo run --release -- fibonacci
-cargo run --release -- goldbach-1000
-cargo run --release -- gps
-cargo run --release -- kaprekar-6174
-cargo run --release -- matrix-mechanics
-cargo run --release -- path-discovery
-cargo run --release -- pn-junction-tunneling
-cargo run --release -- polynomial
-cargo run --release -- transistor-switch
-cargo run --release -- sudoku
+## Check and timing
+
+Run the project check:
+
+```sh
+make check
 ```
 
-Structured JSON output for one case:
+`make check` launches every built example and prints:
 
-```bash
-cargo run --release -- collatz-1000 --format json
+- `status`
+- one stable timing value in milliseconds
+
+### Meaning of `status`
+
+- `OK` — the example ran successfully on all warmup and timed runs
+- `FAIL` — at least one run failed or could not be started
+- `MISSING` — the executable was not built
+
+### Meaning of `time (ms)`
+
+The reported time is a stable wall-clock estimate in milliseconds for the whole
+standalone executable.
+It includes process startup and ordinary scheduling effects, so it should be
+read as a practical runtime number, not as a microbenchmark of only the inner
+algorithm.
+
+The timing helper is:
+
+```sh
+python3 tools/check_with_timing.py
 ```
 
-Structured JSON output for the whole suite:
+To let each program print its normal output during timing:
 
-```bash
-cargo run --release -- --all --format json
+```sh
+python3 tools/check_with_timing.py --verbose
 ```
 
-Snapshot management from the repository root:
+## Dependencies
 
-```bash
-cargo run --release -- show sudoku
-cargo run --release -- show sudoku json
-cargo run --release -- refresh
-cargo run --release -- check
+Most examples only need the C standard library and `libm`.
+
+Two examples currently use extra libraries:
+
+- `fibonacci.c` uses **GMP** for exact big integer arithmetic
+- `delfour.c` uses **OpenSSL libcrypto** for SHA-256 and HMAC-SHA256
+
+Typical Debian/Ubuntu packages:
+
+```sh
+sudo apt-get install build-essential libgmp-dev libssl-dev python3
 ```
 
-## Stable output and snapshots
-
-arc supports two stable output forms:
-
-- the normal human-readable ARC text output
-- a structured JSON report produced with `--format json`
-
-The recommended workflow is:
-
-1. keep the human-readable text output for people
-2. keep JSON as the canonical machine-checkable form
-3. store checked-in snapshots for both
-4. refresh snapshots only when a case intentionally changes
-
-The `arc` binary handles this directly when you run it from the repository root. Because snapshots are regular files in the repository, intentional output changes show up as normal diffs in version control. If you add or grow a case, run `cargo run --release -- refresh`, review the snapshot diff, and commit it together with the code change.
-
-```bash
-cargo run --release -- refresh
-cargo run --release -- check
-```
-
-What it does:
-
-- runs the current binary from the repository root
-- writes per-case text snapshots under [`snapshots/text/`](snapshots/text/)
-- writes per-case JSON snapshots under [`snapshots/json/`](snapshots/json/)
-- writes `all.txt`, `all.json`, and `list.txt`
-- compares fresh output against the checked-in snapshots during `check`
-
-That gives a practical separation between:
-
-- **computation** — the Rust code that derives the answer and checks it
-- **rendering** — the human-facing text output
-- **regression control** — snapshot files that show when a case changed
-
-This is especially useful for ARC programs because the output is part of the artifact: the answer, the reason why, and the executable checks are all meant to stay auditable and reproducible.
-
-## Snapshot layout
+## Repository layout
 
 ```text
-snapshots/
-  text/
-    <case>.txt
-    all.txt
-    list.txt
-  json/
-    <case>.json
-    all.json
+examples/   standalone C example programs
+bin/        compiled executables produced by `make`
+tools/      helper tools, including the timing checker
+Makefile    build and check entry point
+README.md   project overview
 ```
 
-List available cases:
+## Included examples
 
-```bash
-cargo run --release -- --list
-```
+The example set covers several kinds of problems:
 
-Run all cases in sequence:
+- number theory: Collatz, Goldbach, Kaprekar, Fibonacci
+- symbolic or algebraic reasoning: Euler identity, polynomial consistency
+- search and planning: GPS, path discovery, Sudoku
+- rule-based or policy-style reasoning: control system, EHDS risk ranking, Delfour
+- small scientific toy models: matrix mechanics, PN junction tunneling, transistor switch
+- scaling benchmark: deep taxonomy
 
-```bash
-cargo run --release -- --all
-```
+## Project goal
 
-## ARC output style
+The goal is simple:
 
-Each case prints a short three-part story:
-
-- **Answer** — the result in a compact, human-readable form
-- **Reason Why** — the main witness, derivation, or explanation
-- **Check** — concrete validations and cross-checks that fail loudly on contradiction
-
-Where possible, the check section uses more than one line of evidence, so the program does not rely on a single computation path to certify its own output.
-
-
-Each case run also reports elapsed time in milliseconds on stderr, with ANSI color for the timing line.
+- write small programs that answer a precise question
+- make the reasoning visible in the program output
+- validate the result with explicit checks
+- keep each example easy to inspect and rerun
