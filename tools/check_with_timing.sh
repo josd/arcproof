@@ -34,21 +34,15 @@ ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 BIN_DIR="$ROOT_DIR/bin"
 
 if [ -t 1 ] && [ "${TERM:-}" != "dumb" ] && [ -z "${NO_COLOR:-}" ]; then
-  C_RESET=$'\033[0m'
-  C_NAME=$'\033[38;5;252m'    # light gray
-  C_OK=$'\033[38;5;82m'       # terminal green
-  C_FAIL=$'\033[38;5;196m'    # terminal red
-  C_MISSING=$'\033[38;5;214m' # warm amber
-  C_TIME=$'\033[38;5;220m'    # golden yellow
-  C_TRAIL=$'\033[38;5;250m'   # soft gray
+  RED="\e[31m"
+  GREEN="\e[32m"
+  YELLOW="\e[33m"
+  NORMAL="\e[0;39m"
 else
-  C_RESET=''
-  C_NAME=''
-  C_OK=''
-  C_FAIL=''
-  C_MISSING=''
-  C_TIME=''
-  C_TRAIL=''
+  RED=''
+  GREEN=''
+  YELLOW=''
+  NORMAL=''
 fi
 
 now_ns() {
@@ -85,9 +79,9 @@ for name in "${EXAMPLES[@]}"; do
   binary="$BIN_DIR/$name"
   if [ ! -x "$binary" ]; then
     printf '%b%-25s%b  %b%8s%b  %b%s%b\n' \
-      "$C_NAME" "$name" "$C_RESET" \
-      "$C_TIME" '-' "$C_RESET" \
-      "$C_MISSING" 'MISSING' "$C_RESET"
+      "$NORMAL" "$name" "$NORMAL" \
+      "$YELLOW" '-' "$NORMAL" \
+      "$YELLOW" 'MISSING' "$NORMAL"
     all_ok=0
     total_missing=$((total_missing + 1))
     continue
@@ -97,28 +91,28 @@ for name in "${EXAMPLES[@]}"; do
   if [ "$rc" -eq 0 ]; then
     ms="$(ns_to_ms "$elapsed_ns")"
     printf '%b%-25s%b  %b%8s ms%b  %b%s%b\n' \
-      "$C_NAME" "$name" "$C_RESET" \
-      "$C_TIME" "$ms" "$C_RESET" \
-      "$C_OK" 'OK' "$C_RESET"
+      "$NORMAL" "$name" "$NORMAL" \
+      "$YELLOW" "$ms" "$NORMAL" \
+      "$GREEN" 'OK' "$NORMAL"
     total_ok=$((total_ok + 1))
     total_ns=$((total_ns + elapsed_ns))
   else
     printf '%b%-25s%b  %b%8s%b  %b%s%b\n' \
-      "$C_NAME" "$name" "$C_RESET" \
-      "$C_TIME" '-' "$C_RESET" \
-      "$C_FAIL" 'FAIL' "$C_RESET"
+      "$NORMAL" "$name" "$NORMAL" \
+      "$YELLOW" '-' "$NORMAL" \
+      "$RED" 'FAIL' "$NORMAL"
     all_ok=0
     total_fail=$((total_fail + 1))
   fi
 done
 
 printf '\n'
-printf '%b%s%b %b%d OK%b' "$C_TRAIL" 'Summary:' "$C_RESET" "$C_OK" "$total_ok" "$C_RESET"
-printf '  %b%d FAIL%b' "$C_FAIL" "$total_fail" "$C_RESET"
+printf '%bSummary:%b %b%d OK%b' "$NORMAL" "$NORMAL" "$GREEN" "$total_ok" "$NORMAL"
+printf '  %b%d FAIL%b' "$RED" "$total_fail" "$NORMAL"
 if [ "$total_missing" -gt 0 ]; then
-  printf '  %b%d MISSING%b' "$C_MISSING" "$total_missing" "$C_RESET"
+  printf '  %b%d MISSING%b' "$YELLOW" "$total_missing" "$NORMAL"
 fi
-printf '  %b%s ms total%b\n' "$C_TIME" "$(ns_to_ms "$total_ns")" "$C_RESET"
+printf '  %b%s ms total%b\n' "$YELLOW" "$(ns_to_ms "$total_ns")" "$NORMAL"
 
 if [ "$all_ok" -eq 1 ]; then
   exit 0
