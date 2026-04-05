@@ -1,4 +1,3 @@
-
 /*
  * fibonacci.c
  *
@@ -52,19 +51,28 @@ static void fast_doubling(size_t n, mpz_t fn, mpz_t fn1) {
 }
 
 int main(void) {
-    const size_t targets[5] = {0, 1, 10, 100, 1000};
-    mpz_t vals[5];
-    for (int i = 0; i < 5; ++i) { mpz_init(vals[i]); fibonacci_iterative(targets[i], vals[i]); }
+    const size_t targets[6] = {0, 1, 10, 100, 1000, 10000};
+    mpz_t vals[6];
+    for (int i = 0; i < 6; ++i) {
+        mpz_init(vals[i]);
+        fibonacci_iterative(targets[i], vals[i]);
+    }
+
     bool f10_ok = mpz_cmp_ui(vals[2], 55) == 0;
+
     char *f1000_str = mpz_get_str(NULL, 10, vals[4]);
+    char *f10000_str = mpz_get_str(NULL, 10, vals[5]);
     size_t f1000_digits = strlen(f1000_str);
+    size_t f10000_digits = strlen(f10000_str);
 
     bool fast_ok = true;
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 6; ++i) {
         mpz_t a, b;
         mpz_inits(a, b, NULL);
         fast_doubling(targets[i], a, b);
-        if (mpz_cmp(a, vals[i]) != 0) fast_ok = false;
+        if (mpz_cmp(a, vals[i]) != 0) {
+            fast_ok = false;
+        }
         mpz_clears(a, b, NULL);
     }
 
@@ -78,24 +86,39 @@ int main(void) {
     mpz_add_ui(right, right, 1);
     bool cassini_ok = mpz_cmp(left, right) == 0;
 
+    bool f10000_last3_ok = false;
+    if (f10000_digits >= 3) {
+        f10000_last3_ok = strcmp(f10000_str + (f10000_digits - 3), "875") == 0;
+    }
+
     printf("=== Answer ===\n");
-    printf("The requested Fibonacci values are computed exactly, up to F(1000).\n");
+    printf("The requested Fibonacci values are computed exactly, up to F(10000).\n");
     printf("\n=== Reason Why ===\n");
     printf("The main computation uses the defining recurrence F(n+1)=F(n)+F(n-1), and the results are cross-checked with fast doubling.\n");
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 6; ++i) {
         char *s = mpz_get_str(NULL, 10, vals[i]);
         printf("value[%zu]          : F(%zu) = %s\n", (size_t)i, targets[i], s);
         free(s);
     }
     printf("digits in F(1000)   : %zu\n", f1000_digits);
+    printf("digits in F(10000)  : %zu\n", f10000_digits);
     printf("\n=== Check ===\n");
-    printf("F(10) = 55          : %s\n", f10_ok ? "yes" : "no");
-    printf("fast doubling agrees: %s\n", fast_ok ? "yes" : "no");
-    printf("Cassini at n=100    : %s\n", cassini_ok ? "yes" : "no");
+    printf("F(10) = 55            : %s\n", f10_ok ? "yes" : "no");
+    printf("fast doubling agrees  : %s\n", fast_ok ? "yes" : "no");
+    printf("Cassini at n=100      : %s\n", cassini_ok ? "yes" : "no");
     printf("F(1000) has 209 digits: %s\n", (f1000_digits == 209) ? "yes" : "no");
+    printf("F(10000) has 2090 digits: %s\n", (f10000_digits == 2090) ? "yes" : "no");
+    printf("F(10000) ends in 875  : %s\n", f10000_last3_ok ? "yes" : "no");
 
     free(f1000_str);
+    free(f10000_str);
     mpz_clears(f99, f100, f101, left, right, NULL);
-    for (int i = 0; i < 5; ++i) mpz_clear(vals[i]);
-    return (f10_ok && fast_ok && cassini_ok && f1000_digits == 209) ? 0 : 1;
+    for (int i = 0; i < 6; ++i) {
+        mpz_clear(vals[i]);
+    }
+
+    return (f10_ok && fast_ok && cassini_ok && f1000_digits == 209 &&
+            f10000_digits == 2090 && f10000_last3_ok)
+               ? 0
+               : 1;
 }
